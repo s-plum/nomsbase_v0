@@ -1,0 +1,27 @@
+<% layout('layout') -%>
+<div ng-app="testApp">
+<form name="testform" novalidate ng-controller="Recipe">
+	<label for="recipe-name">Name:</label>
+	<input type="text" id="recipe-name" ng-model="data.name" required/>
+	<fieldset>
+		<legend>Ingredients</legend>
+		<ul ng-repeat="ingredient in data.ingredients">
+			<li>{{ingredient.amount}} {{ingredient.name}}</li>
+		</ul>
+		<div>
+			<p>
+				<label for="ingredient-name">Ingredient</label>
+				<input type="text" id="ingredient-name"/>
+			</p>
+			<p>
+				<label for="ingredient-amount">Amount</label>
+				<input type="text" id="ingredient-amount" ui-keydown="{'enter':'addIngredient($event)'}"/>
+			</p>
+		</div>
+		<a id="add-ingredient" href="#" ng-click="addIngredient()">Add ingredient</a>
+	</fieldset>
+	<button ng-disabled="testform.$invalid" ng-click="save()">Save</button>
+</form>
+</div>
+<% script('js/keypress.js') -%>
+<% script('js/app.js') -%>
