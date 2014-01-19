@@ -1,6 +1,4 @@
-var nomsbase = angular.module('nomsbase',['ui.keypress']);
-
-nomsbase.controller('Add', function ($scope, $http) {
+function IndexController($scope, $http) {
 	$scope.data = {};
 	$scope.data['name'] = "";
 	$scope.data['ingredients'] = {};
@@ -20,12 +18,4 @@ nomsbase.controller('Add', function ($scope, $http) {
 				dataType: 'json'
 			});
 	};
-});
-
-nomsbase.controller('View', function($scope, $http) {
-	$scope.data = {};
-	$http({method:'GET', url: '/show/snowball'}).
-		success(function(data, status, headers, config) {
-			$scope.data = data;
-		});
-});
+}

@@ -1,12 +1,13 @@
 <% layout('layout') -%>
-<div ng-app="testApp">
-<form name="testform" novalidate ng-controller="Recipe">
+<h1>nomsbase</h1>
+<div ng-app="nomsbase">
+<form name="testform" novalidate ng-controller="Add">
 	<label for="recipe-name">Name:</label>
 	<input type="text" id="recipe-name" ng-model="data.name" required/>
 	<fieldset>
 		<legend>Ingredients</legend>
-		<ul ng-repeat="ingredient in data.ingredients">
-			<li>{{ingredient.amount}} {{ingredient.name}}</li>
+		<ul ng-repeat="(key, value) in data.ingredients">
+			<li>{{value}} {{key}}</li>
 		</ul>
 		<div>
 			<p>
