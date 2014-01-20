@@ -11,6 +11,10 @@ exports.recipe = function(req, res){
 	res.render('recipe', {title:'test'});
 }
 
+exports.test = function(req, res){
+	res.render('test', {title:'test'});
+}
+
 exports.add = function(db) {
 	return function(req, res) {
 		var collection = db.collection('nomsbase');
@@ -25,7 +29,7 @@ exports.add = function(db) {
 	}
 };
 
-exports.show = function(db) {
+exports.get = function(db) {
 	return function(req, res) {
 		var collection = db.collection('nomsbase');
 		collection.find({name: {$regex: req.params.id, $options: 'i'}}).toArray(function(err, results) {
@@ -38,4 +42,25 @@ exports.show = function(db) {
 		})
 	}
 }
+
+exports.search = function(db) {
+	return function(req, res) {
+		var collection = db.collection('nomsbase');
+		collection.find({ $or: [{name: {$regex: req.params.id, $options: 'i'}},{"ingredients.name" : {$regex: req.params.id, $options: 'i'}}]}).toArray(function(err, results) {
+			if (err) {
+				res.send('shit!');
+			}
+			else {
+				res.send(results);
+			}
+		})
+	}
+}
+
+exports.partials = function (req, res) {
+  var name = req.params.name;
+  res.render('partials/' + name, {
+	  layout: false
+  });
+};
 
