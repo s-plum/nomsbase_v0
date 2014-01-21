@@ -8,11 +8,21 @@ exports.index = function(req, res){
 };
 
 exports.recipe = function(req, res){
-	res.render('recipe', {title:'test'});
+	var title = req.params.id.split('-').join(' ');
+	res.render('index', {title:title});
 }
 
-exports.test = function(req, res){
-	res.render('test', {title:'test'});
+exports.new = function(req, res) {
+	res.render('index', {title:'expand nomsbase'});
+}
+
+exports.edit = function(req, res) {
+	res.render('index', {title:'update nomsbase'});
+}
+
+exports.recipes = function(req, res) {
+	var title = req.params.id.split('-').join(' ');
+	res.render('index', {title:title + ' recipes'});
 }
 
 exports.add = function(db) {

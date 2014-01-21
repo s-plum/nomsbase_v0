@@ -35,12 +35,19 @@ if ('development' == app.get('env')) {
 //for views
 app.get('/', routes.index);
 app.get('/recipe/:id', routes.recipe);
-app.get('/test/:id', routes.test);
+app.get('/new', routes.new);
+app.get('/recipes/:id', routes.recipes);
+app.get('/edit/:id', routes.edit);
 app.get('/partials/:name', routes.partials);
 
 //data get/set
 app.post('/add', routes.add(db));
 app.get('/get/:id', routes.get(db));
+app.get('/search/:id', routes.search(db));
+
+app.use(function(req, res, next){
+    res.status(404).render('404', {title: "Sorry, page not found"});
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

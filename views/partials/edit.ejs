@@ -1,0 +1,62 @@
+<form name="nomsform" novalidate>
+	<label for="recipe-name">Name:</label>
+	<input type="text" id="recipe-name" ng-model="data.name" required/>
+	<fieldset>
+		<legend>Ingredients</legend>
+		<ul ng-repeat="ingredient in data.ingredients">
+			<li>
+				<p>
+					<label for="ingredient-amount-{{$index}}">Amount</label>
+					<input type="text" id="ingredient-name-{{$index}}" ng-model="ingredient.amount" placeholder="1" ng-required="ingredient.unit || ingredient.name"/>
+				</p>
+				<p>
+					<label for="ingredient-unit-{{$index}}">Unit</label>
+					<input type="text" id="ingredient-unit-{{$index}}" ng-model="ingredient.unit" placeholder="cup" ng-required="ingredient.amount || ingredient.name"/>
+				</p>
+				<p>
+					<label for="ingredient-name-{{$index}}">Ingredient</label>
+					<input type="text" id="ingredient-name-{{$index}}" ng-model="ingredient.name" placeholder="butter" ng-required="ingredient.unit || ingredient.amount"/>
+				</p>
+				<a class="remove-ingredient" href="#" ng-click="removeItem($index, 'ingredients')">remove</a>
+			</li>
+		</ul>
+		<div>
+			<p>
+				<label for="ingredient-amount-new">Amount</label>
+				<input type="text" id="ingredient-amount-new" class="ingredient-new" placeholder="1" ng-enter="addIngredient()"/>
+			</p>
+			<p>
+				<label for="ingredient-unit-new">Unit</label>
+				<input type="text" id="ingredient-unit-new" class="ingredient-new" placeholder="cup" ng-enter="addIngredient()"/>
+			</p>
+			<p>
+				<label for="ingredient-name-new">Ingredient</label>
+				<input type="text" id="ingredient-name-new" class="ingredient-new" placeholder="butter" ng-enter="addIngredient()"/>
+			</p>
+		</div>
+		<a id="add-ingredient" href="#" ng-click="addIngredient()">Add ingredient</a>
+	</fieldset>
+	
+	<label for="recipe-temp">Baking Temperature (&deg;F)</label>
+	<input type="number" id="recipe-temp" placeholder="350" min="125" max="500" ng-model="data.bakingTemp"/> 
+	
+	<label for="recipe-instructions">Instructions</label>
+	<textarea id="recipe-instructions" placeholder="Combine all ingredients. Add more butter." ng-model="data.instructions" required></textarea>
+	
+	<label for="recipe-notes">Notes</label>
+	<textarea id="recipe-notes" placeholder="Do not feed after midnight." ng-model="data.notes"></textarea>
+	
+	<fieldset>
+		<legend>Tags</legend>
+		<ul id="tags" ng-repeat="tag in data.tags">
+			<li><a href="#" ng-click="removeItem($index, 'tags')">{{ tag }}</a></li>
+		</ul>
+		<div>
+			<label for="recipe-tag">Tag</label>
+			<input type="text" id="recipe-tag" placeholder="noms" ng-enter="addTag($index)"/>
+			<a id="add-tag" href="#" ng-click="addTag()">Add tag</a>
+		</div>
+	</fieldset>
+	
+	<button ng-disabled="nomsform.$invalid" ng-click="save()">Save</button>
+</form>
