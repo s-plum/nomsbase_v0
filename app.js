@@ -34,10 +34,10 @@ if ('development' == app.get('env')) {
 
 //for views
 app.get('/', routes.index);
-app.get('/recipe/:id', routes.recipe);
+app.get('/recipe/:id', routes.recipe(db));
 app.get('/new', routes.new);
 app.get('/recipes/:id', routes.recipes);
-app.get('/edit/:id', routes.edit);
+app.get('/edit/:id', routes.edit(db));
 app.get('/partials/:name', routes.partials);
 
 //data get/set

@@ -5,8 +5,8 @@ var nomsbase = angular.module('nomsbase',['ngRoute']).
 			controller: 'View'
 		});
 		$routeProvider.when('/recipes/:id', {
-			templateUrl: '/partials/search',
-			controller: 'Search'
+			controller: 'Search',
+			templateUrl: '/partials/search'
 		});
 		$routeProvider.when('/new', {
 			templateUrl: '/partials/edit',
@@ -74,19 +74,32 @@ nomsbase.controller('View', function($scope, $http, $routeParams) {
 	var id = $routeParams.id.split('-').join(' ');
 	$http({method:'GET', url: '/get/'+id}).
 		success(function(data, status, headers, config) {
-			$scope.data = data;
+			if (typeof data == 'object') {
+				$scope.data = data;
+			}
+			else {
+				$.get('/partials/no-results', function(response) {
+					$('div[ng-view]').replaceWith($(response));
+				})
+			}
 		});
 });
 
 nomsbase.controller('Search', function($scope, $http, $routeParams) {
 	$scope.data = [];
 	var id = $routeParams.id.split('-').join(' ');
+	$scope.data.searchTerm = id;
 	$http({method:'GET', url: '/search/'+id}).
 		success(function(data, status, headers, config) {
-			$scope.data = data;
-			$.each($scope.data, function(index, value) {
-				value['idName'] = value.name.split(' ').join('-').toLowerCase();
-			});
+			$scope.data.recipes = data;
+			if (data.length > 0) {
+				$.each($scope.data, function(index, value) {
+					value['idName'] = value.name.split(' ').join('-').toLowerCase();
+				});
+			}
+			else {
+				$('div[ng-view]').append($('<p>No results found. You\'re doomed.</p>'));
+			}
 		});
 });
 

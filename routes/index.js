@@ -1,23 +1,22 @@
-
-/*
- * GET home page.
- */
-
 exports.index = function(req, res){
   res.render('index', {title: 'babiez'});
 };
 
-exports.recipe = function(req, res){
-	var title = req.params.id.split('-').join(' ');
-	res.render('index', {title:title});
+exports.recipe = function(db) {
+	return function(req, res) {
+		var title = req.params.id.split('-').join(' ');
+		res.render('index', {title:title});
+	}
 }
 
 exports.new = function(req, res) {
 	res.render('index', {title:'expand nomsbase'});
 }
 
-exports.edit = function(req, res) {
-	res.render('index', {title:'update nomsbase'});
+exports.edit = function(db) {
+	return function(req, res) {
+		res.render('index', {title:'update nomsbase'});
+	}
 }
 
 exports.recipes = function(req, res) {
