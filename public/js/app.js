@@ -8,6 +8,10 @@ var nomsbase = angular.module('nomsbase',['ngRoute']).
 			controller: 'Search',
 			templateUrl: '/partials/search'
 		});
+		$routeProvider.when('/recipes', {
+			controller: 'Search',
+			templateUrl: '/partials/search'
+		});
 		$routeProvider.when('/new', {
 			templateUrl: '/partials/edit',
 			controller: 'New'
@@ -48,7 +52,7 @@ nomsbase.controller('New', function ($scope, $http) {
 		$scope.data[array].splice(id, 1);
 	};
 	$scope.save = function() {
-			console.log('saving');
+			console.log($scope.data);
 			$http({
 				url : 'http://localhost:3000/add',
 				data : $scope.data,
@@ -63,10 +67,43 @@ nomsbase.controller('Edit', function($scope, $http, $routeParams) {
 	$scope.data = {};
 	var id = $routeParams.id.split('-').join(' ');
 	//get original recipe data
-	$http({method:'GET', url: '/get/'+id}).
+	$http({method:'GET', url: '/get/'+id + '?' + new Date().getTime()}).
 		success(function(data, status, headers, config) {
 			$scope.data = data;
 		});
+	$scope.addIngredient = function() {
+		if ($('#ingredient-name-new').val() && $('#ingredient-amount-new').val() && $('#ingredient-unit-new').val()) {
+			$scope.data.ingredients.push({'name':$('#ingredient-name-new').val(),'amount':$('#ingredient-amount-new').val(), 'unit': $('#ingredient-unit-new').val()});
+			//$scope.data.ingredients[$('#ingredient-name').val()] = $('#ingredient-amount').val(); 
+			$('.ingredient-new').removeClass('ng-invalid').addClass('ng-valid').val('');
+			$('#ingredient-amount-new').focus();
+		}
+		else {
+			$('.ingredient-new').each(function() {
+				if (!$(this).val()) $(this).removeClass('ng-valid').addClass('ng-invalid');
+				else $(this).addClass('ng-valid').removeClass('ng-invalid');
+			});
+		}
+	};
+	$scope.addTag = function() {
+		if ($('#recipe-tag').val()) {
+			$scope.data.tags.push($('#recipe-tag').val());
+			$('#recipe-tag').val('');
+		}
+	};
+	$scope.removeItem = function(id, array) {
+		$scope.data[array].splice(id, 1);
+	};
+	$scope.save = function() {
+		console.log($scope.data);
+		$http({
+			url : 'http://localhost:3000/update/'+id,
+			data : $scope.data,
+			method : 'POST',
+			contentType: 'application/json; charset=utf-8',
+			dataType: 'json'
+		});
+	};
 });
 
 nomsbase.controller('View', function($scope, $http, $routeParams) {
@@ -87,13 +124,14 @@ nomsbase.controller('View', function($scope, $http, $routeParams) {
 
 nomsbase.controller('Search', function($scope, $http, $routeParams) {
 	$scope.data = [];
-	var id = $routeParams.id.split('-').join(' ');
+	if (typeof $routeParams.q != 'undefined') var id = $routeParams.q;
+	else var id = $routeParams.id.split('-').join(' ');
 	$scope.data.searchTerm = id;
 	$http({method:'GET', url: '/search/'+id}).
 		success(function(data, status, headers, config) {
 			$scope.data.recipes = data;
 			if (data.length > 0) {
-				$.each($scope.data, function(index, value) {
+				$.each($scope.data.recipes, function(index, value) {
 					value['idName'] = value.name.split(' ').join('-').toLowerCase();
 				});
 			}

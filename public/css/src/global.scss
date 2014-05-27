@@ -1,5 +1,22 @@
-@import "compass/css3", "compass/support", "normalize", "fonts", "variables", "forms";
+@import "compass/css3", "compass/support", "utilities/normalize", "utilities/fonts", "utilities/functions", "utilities/mixins", "utilities/variables", "partials/nav", "partials/forms";
 
 body {
-	font: 1rem/150% Arial, Helvetica, sans-serif;
+	background: #fff;
+	color: #fff;
+	font: 300 1rem/125% 'Roboto Condensed', Arial, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+h1, h2 {
+	font: 300 1.75rem 'Roboto Condensed', Arial, Helvetica, sans-serif;
+}
+
+a {
+	color: #fff;
+	text-decoration: none;
+}
+
+#skip-to-nav {
+	@extend %wai;
 }

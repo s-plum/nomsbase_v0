@@ -5,6 +5,8 @@ var express = require('express'), //templating
 	http = require('http'),
 	path = require('path'),
 	mongoose = require('mongoose');
+	api = require('./routes/api'),
+	ObjectID = require('mongodb').ObjectID; 
 
 //connect to database	
 mongoose.connect('mongodb://localhost:27017/mydb');
@@ -36,14 +38,16 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/recipe/:id', routes.recipe(db));
 app.get('/new', routes.new);
+app.get('/recipes', routes.recipes);
 app.get('/recipes/:id', routes.recipes);
 app.get('/edit/:id', routes.edit(db));
 app.get('/partials/:name', routes.partials);
 
 //data get/set
-app.post('/add', routes.add(db));
-app.get('/get/:id', routes.get(db));
-app.get('/search/:id', routes.search(db));
+app.post('/add', api.add(db));
+app.post('/update/:id', api.update(db));
+app.get('/get/:id', api.get(db));
+app.get('/search/:id', api.search(db));
 
 app.use(function(req, res, next){
     res.status(404).render('404', {title: "Sorry, page not found"});

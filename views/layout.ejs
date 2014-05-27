@@ -1,17 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="nomsbase">
-  <head>
+<html lang="en" ng-app="nomsbase" class="no-js">
+<head>
     <meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="/css/global.css" rel="stylesheet">
-
-  </head>
-  <body>
-    <%- body %>
-  </body>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js"></script>
-  <script src="/js/app.js"></script>
+    <title><%= title %></title>
+    <script src="/js/plumrnizr.min.js"></script>
+</head>
+<body>
+    <a href="#nav" id="skip-to-nav">Skip to Navigation</a>
+    <main>
+        <%- body %>
+    </main>
+    <nav <%if (title == 'nomsbase') { %>class="home"<% } %>>
+        <h1 id="nav-label">nomsbase <b>menu</b></h2>
+        <ul id="nav" aria-labelledby="nav-label">
+            <li><a href="#">cake</a></li>
+            <li><a href="#">cookies</a></li>
+            <li><a href="#">brownies/bars</a></li>
+            <li><a href="#">bread</a></li>
+            <li><a href="#">candy</a></li>
+            <li><a href="#">other</a></li>
+        </ul>
+        <form class="search" action="/recipes/">
+            <label for="search">Search</label>
+            <input type="search" id="search" placeholder="search" name="q"/>
+        </form>
+    </nav>
+</body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js"></script>
+<script src="/js/app.js"></script>
 </html>

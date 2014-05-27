@@ -1,0 +1,63 @@
+nav {
+	@extend %borderbox;
+	background: $plum;
+	padding: 10px;
+	@include breakpoint($small) {
+		position: absolute;
+		top: 0;
+		width: 100%;
+	}
+	h1 {
+		line-height: .75em;
+		margin: 0;
+		b {
+			@extend %wai;
+		}
+	}
+	form {
+		label {
+			@extend %wai;
+		}
+		input {
+			@extend %borderbox;
+			background: inline-image("whisk.svg") darken($plum, 2%) no-repeat 3px 2px/25px 25px;
+			border: none;
+			border-radius: 3px;
+			box-shadow: -1px -1px 2px 0 rgba(0,0,0,.5);
+			color: rgba(255,255,255,.75);
+			font-size: 16px;
+			padding: 5px 5px 5px 35px;
+			width: 100%;
+			&:focus {
+				background-color: darken($plum, 5%);
+				outline: none;
+			}
+			&::-webkit-input-placeholder {
+			   color: rgba(255,255,255,.2);
+			}
+
+			&:-moz-placeholder { /* Firefox 18- */
+			   color: red;  
+			}
+
+			&::-moz-placeholder {  /* Firefox 19+ */
+			   color: red;  
+			}
+
+			&:-ms-input-placeholder {  
+			   color: red;  
+			}
+		}
+	}
+	ul {
+		@include display-flex;
+		@include flex-property(flex-flow, row wrap);
+		clear: both;
+		list-style: none;
+		margin: 10px 0;
+		padding: 0;
+		li {
+			width: 50%;
+		}
+	}
+}
