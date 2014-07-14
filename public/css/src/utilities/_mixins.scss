@@ -19,13 +19,6 @@ mixins
 	background-color: $fallback;
 }
 
-//flexbox prefix helpers
-@mixin display-flex {
-	display: -ms-flex;
-	display: -webkit-flex;
-	display: flex;
-}
-
 @mixin flex-property($property, $value) {
 	-ms-#{$property}: $value;
 	-webkit-#{$property}: $value;
@@ -75,5 +68,12 @@ extends
 	text-indent: -9999em;
 	-webkit-appearance: none;
 	z-index: -1;
+}
+
+//flexbox prefix helpers
+%display-flex {
+	display: -ms-flex;
+	display: -webkit-flex;
+	display: flex;
 }
 

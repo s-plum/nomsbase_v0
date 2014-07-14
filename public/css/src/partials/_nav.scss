@@ -1,12 +1,8 @@
 nav {
 	@extend %borderbox;
+	@include flex-property(order, 1);
 	background: $plum;
 	padding: 10px;
-	@include breakpoint($small) {
-		position: absolute;
-		top: 0;
-		width: 100%;
-	}
 	h1 {
 		line-height: .75em;
 		margin: 0;
@@ -37,20 +33,20 @@ nav {
 			}
 
 			&:-moz-placeholder { /* Firefox 18- */
-			   color: red;  
+			   color: rgba(255,255,255,.2);
 			}
 
 			&::-moz-placeholder {  /* Firefox 19+ */
-			   color: red;  
+			   color: rgba(255,255,255,.2);
 			}
 
 			&:-ms-input-placeholder {  
-			   color: red;  
+			   color: rgba(255,255,255,.2);
 			}
 		}
 	}
 	ul {
-		@include display-flex;
+		@extend %display-flex;
 		@include flex-property(flex-flow, row wrap);
 		clear: both;
 		list-style: none;

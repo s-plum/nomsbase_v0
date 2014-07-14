@@ -6,6 +6,8 @@ body {
 	font: 300 1rem/125% 'Roboto Condensed', Arial, Helvetica, sans-serif;
 	margin: 0;
 	padding: 0;
+	@extend %display-flex;
+	@include flex-property(flex-flow, column);
 }
 
 h1, h2 {
@@ -17,6 +19,28 @@ a {
 	text-decoration: none;
 }
 
+main {
+	@include flex-property(order, 2);
+}
+
 #skip-to-nav {
-	@extend %wai;
+	overflow: hidden;
+	position: absolute;
+	text-indent: -9999em;
+	z-index: -1;
+	.js & {
+		background: inline-image("menu-closed.png") no-repeat center / 100% auto;
+		display: block;
+		height: 50px;	
+		right: 0px;
+		top: -10px;
+		width: 50px;
+		z-index: 2;
+		-webkit-backface-visibility: hidden;
+		@include transition(top 200ms ease, background 100ms ease);
+		&:hover, &:focus {
+			background: inline-image("menu-open.png") no-repeat center / 100% auto;
+			top: -5px;
+		}
+	}
 }
