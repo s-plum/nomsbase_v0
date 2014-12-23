@@ -29,31 +29,74 @@ nav {
 				outline: none;
 			}
 			&::-webkit-input-placeholder {
-			   color: rgba(255,255,255,.2);
+			   color: rgba(255,255,255,.4);
 			}
 
 			&:-moz-placeholder { /* Firefox 18- */
-			   color: rgba(255,255,255,.2);
+			   color: rgba(255,255,255,.4);
 			}
 
 			&::-moz-placeholder {  /* Firefox 19+ */
-			   color: rgba(255,255,255,.2);
+			   color: rgba(255,255,255,.4);
 			}
 
 			&:-ms-input-placeholder {  
-			   color: rgba(255,255,255,.2);
+			   color: rgba(255,255,255,.4);
 			}
 		}
 	}
 	ul {
 		@extend %display-flex;
 		@include flex-property(flex-flow, row wrap);
+		@include flex-property(justify-content, space-between);
 		clear: both;
 		list-style: none;
 		margin: 10px 0;
 		padding: 0;
 		li {
-			width: 50%;
+			margin-bottom: .25em;
+			width: 49%;
+		}
+	}
+	a {
+		display: block;
+		padding: .5em 0 .5em 2.75em;
+		position: relative;
+		@include transition(all 100ms ease);
+		&:before, &:after {
+			content: "";
+			display: block;
+			left: 0;
+			position: absolute;		
+			top: -.125em;	
+		}
+		&:before {
+			background: rgba(255,255,255,1);
+			border-radius: 100%;
+			height: 0;
+			margin: 1.25em 0 0 1.25em;
+			width: 0;
+			@include transition(all 100ms ease);
+		}
+		&:hover, &:focus {
+			padding-left: 3em;
+			&:before {
+				height: 2.5em;
+				margin: 0;
+				width: 2.5em;
+				z-index: 1;
+			}
+		}
+		&:after {
+			height: 2.5em;
+			width: 2.5em;
+			z-index: 2;
+		}
+		$noms: cookies cake brownies bread candy other;
+		@each $nom in $noms {
+			&.#{$nom}:after {
+				background: image-url("#{$nom}.svg") no-repeat center/85% auto;
+			}
 		}
 	}
 }

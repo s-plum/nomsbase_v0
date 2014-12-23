@@ -12,7 +12,7 @@ var express = require('express'), //templating
 mongoose.connect('mongodb://localhost:27017/mydb');
 var db = mongoose.connection;
 db.once('connected', function() {
-	console.log("Connected to database")
+	console.log("Connected to database");
 });
 
 var app = express();
@@ -36,18 +36,18 @@ if ('development' == app.get('env')) {
 
 //for views
 app.get('/', routes.index);
-app.get('/recipe/:id', routes.recipe(db));
+app.get('/recipe/:id/:name', routes.recipe(db));
 app.get('/new', routes.new);
 app.get('/recipes', routes.recipes);
-app.get('/recipes/:id', routes.recipes);
-app.get('/edit/:id', routes.edit(db));
+app.get('/recipes/:query', routes.recipes);
+app.get('/edit/:id/:name', routes.edit(db));
 app.get('/partials/:name', routes.partials);
 
 //data get/set
 app.post('/add', api.add(db));
 app.post('/update/:id', api.update(db));
 app.get('/get/:id', api.get(db));
-app.get('/search/:id', api.search(db));
+app.get('/search/:query', api.search(db));
 
 app.use(function(req, res, next){
     res.status(404).render('404', {title: "Sorry, page not found"});

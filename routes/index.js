@@ -21,7 +21,7 @@ exports.edit = function(db) {
 
 exports.recipes = function(req, res) {
 	if (req.query && req.query.q) var title = req.query.q;
-	else var title = req.params.id.split('-').join(' ');
+	else var title = req.params.query.split('-').join(' ');
 	res.render('edit', {title:title + ' recipes'});
 }
 

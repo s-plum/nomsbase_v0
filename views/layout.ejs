@@ -15,21 +15,18 @@
     <nav <%if (title == 'nomsbase') { %>class="home"<% } %>>
         <h1 id="nav-label">nomsbase</h1>
         <ul id="nav" aria-labelledby="nav-label">
-            <li><a href="#">cake</a></li>
-            <li><a href="#">cookies</a></li>
-            <li><a href="#">brownies/bars</a></li>
-            <li><a href="#">bread</a></li>
-            <li><a href="#">candy</a></li>
-            <li><a href="#">other</a></li>
+            <li><a href="#" class="cake">cake</a></li>
+            <li><a href="#" class="cookies">cookies</a></li>
+            <li><a href="#" class="brownies">brownies/bars</a></li>
+            <li><a href="#" class="bread">bread</a></li>
+            <li><a href="#" class="candy">candy</a></li>
+            <li><a href="#" class="other">other</a></li>
         </ul>
         <form class="search" action="/recipes/">
             <label for="search">Search</label>
-            <input type="search" id="search" placeholder="search" name="q"/>
+            <input type="search" id="search" placeholder="search" name="q" autocomplete="off"/>
         </form>
     </nav>
+    <script src="/js/main.js"></script>
 </body>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.min.js"></script>
-<script src="/js/app.js"></script>
 </html>
