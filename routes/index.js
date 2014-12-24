@@ -4,7 +4,7 @@ exports.index = function(req, res){
 
 exports.recipe = function(db) {
 	return function(req, res) {
-		var title = req.params.id.split('-').join(' ');
+		var title = req.params.name.split('-').join(' ');
 		res.render('edit', {title:title});
 	}
 }

@@ -4,12 +4,13 @@ var express = require('express'), //templating
 	routes = require('./routes'),
 	http = require('http'),
 	path = require('path'),
-	mongoose = require('mongoose');
+	mongoose = require('mongoose'),
 	api = require('./routes/api'),
-	ObjectID = require('mongodb').ObjectID; 
+	//ObjectID = require('mongodb').ObjectID,
+	distPath = '/dist'; 
 
 //connect to database	
-mongoose.connect('mongodb://localhost:27017/mydb');
+mongoose.connect('mongodb://localhost:27017/nomsbase');
 var db = mongoose.connection;
 db.once('connected', function() {
 	console.log("Connected to database");
@@ -20,15 +21,15 @@ var app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(partials());
 app.engine('ejs', require('ejs').renderFile);
-app.set('views', path.join(__dirname, '/views'));
+app.set('views', path.join(__dirname, distPath + '/views'));
 app.set('view engine', 'ejs');
-app.use(express.favicon(path.join(__dirname, '/public/img/favicon.ico')));
+app.use(express.favicon(path.join(__dirname, distPath + '/img/favicon.ico')));
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, distPath)));
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
