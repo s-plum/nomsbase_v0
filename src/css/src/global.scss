@@ -32,15 +32,18 @@ main {
 		background: inline-image("menu-closed.png") no-repeat center / 100% auto;
 		display: block;
 		height: 50px;	
-		right: 0px;
+		right: 2px;
 		top: -10px;
 		width: 50px;
 		z-index: 2;
 		-webkit-backface-visibility: hidden;
-		@include transition(top 200ms ease, background 100ms ease);
+		@include transition(top 200ms $bounce);
 		&:hover, &:focus {
 			background: inline-image("menu-open.png") no-repeat center / 100% auto;
-			top: -5px;
+			top: 0px;
+		}
+		@include breakpoint($small) {
+			display: none;
 		}
 	}
 }

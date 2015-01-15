@@ -53,7 +53,13 @@ gulp.task('watch:images', function() {
   });
 });
 
-gulp.task('watch', ['watch:scripts','watch:ejs','watch:images']);
+gulp.task('watch:sass', function() {
+  watch(srcPaths.sass, function(files, cb) {
+    gulp.start('sassy', cb);
+  });
+});
+
+gulp.task('watch', ['watch:scripts','watch:ejs','watch:images','watch:sass']);
 
 gulp.task('clean:images', function (cb) {
   del([distPaths.img + '/*'], cb)
@@ -72,7 +78,7 @@ gulp.task('scripts', function() {
 
 gulp.task('sassy', function() {
   gulp.src(srcPaths.sass)
-    .pipe(watch(srcPaths.sass))
+    //.pipe(watch(srcPaths.sass))
     .pipe(plumber({
       errorHandler: onError
     }))

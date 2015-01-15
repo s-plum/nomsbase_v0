@@ -2,15 +2,33 @@ nav {
 	@extend %borderbox;
 	@include flex-property(order, 1);
 	background: $plum;
-	padding: 10px;
+	padding: 10px 0;
+	@include breakpoint($small) {
+		display: -ms-flex;
+		display: -webkit-flex;
+		display: flex;
+		padding: 0 10px;
+		@include flex-property(justify-content, flex-end);
+	}
 	h1 {
 		line-height: .75em;
 		margin: 0;
+		padding: 0 10px;
+		@include breakpoint($small) {
+			@include flex-property(flex, 1 0 auto);
+			padding: 12px 0 8px;
+		}
 		b {
 			@extend %wai;
 		}
 	}
 	form {
+		padding: 0 10px;
+		position: relative;
+		z-index: 5;
+		@include breakpoint($small) {
+			padding: .5em 0 0 10px;
+		}
 		label {
 			@extend %wai;
 		}
@@ -24,6 +42,14 @@ nav {
 			font-size: 16px;
 			padding: 5px 5px 5px 35px;
 			width: 100%;
+			-webkit-appearance: none;
+			@include breakpoint($small) {
+				width: 6em; 
+				@include transition(width 100ms ease);
+				&:focus {
+					width: 11em;
+				}
+			}
 			&:focus {
 				background-color: darken($plum, 5%);
 				outline: none;
@@ -53,49 +79,128 @@ nav {
 		list-style: none;
 		margin: 10px 0;
 		padding: 0;
+		@include breakpoint($small) {
+			@include flex-property(flex-flow, row nowrap);
+			margin: 0;
+		}
 		li {
 			margin-bottom: .25em;
-			width: 49%;
+			@include breakpoint($tiny) {
+				width: 49%;
+			}
+			@include breakpoint($small) {
+				margin: 0;
+				width: auto;
+			}
 		}
 	}
 	a {
+		background: $plum;
+		box-sizing: border-box;
 		display: block;
-		padding: .5em 0 .5em 2.75em;
+		padding: .75em 0 .75em 3.5em;
 		position: relative;
-		@include transition(all 100ms ease);
+		@include transition(padding-left 150ms ease);
+		b {
+			font-weight: normal;
+		}
 		&:before, &:after {
 			content: "";
 			display: block;
-			left: 0;
 			position: absolute;		
-			top: -.125em;	
 		}
 		&:before {
 			background: rgba(255,255,255,1);
-			border-radius: 100%;
-			height: 0;
-			margin: 1.25em 0 0 1.25em;
+			height: 100%;
+			left: 0;
+			top: 0;
 			width: 0;
-			@include transition(all 100ms ease);
+			z-index: 3;
+			@include transition(all 200ms $bounce);
+			@include breakpoint($small) {
+				height: 0;
+				right: 0;
+			}
 		}
 		&:hover, &:focus {
-			padding-left: 3em;
+			background: rgba(0,0,0,.125);
+			padding-left: 4.25em;
+			@include transition(padding-left 200ms cubic-bezier(0.175, 1.75, 0.7, 1.275));
 			&:before {
-				height: 2.5em;
-				margin: 0;
-				width: 2.5em;
-				z-index: 1;
+				width: 3.75em;
+				z-index: 3;
+				@include breakpoint($small) {
+					height: 2.75em;
+					width: auto;
+				}
 			}
 		}
 		&:after {
 			height: 2.5em;
+			left: 10px;
+			top: .125em;
 			width: 2.5em;
-			z-index: 2;
+			z-index: 4;
+			@include transition(all 100ms ease);
+			@include breakpoint($small) {
+				left: .25em;
+			}
+		}
+		@include breakpoint($small) {
+			height: 2.75em;
+			padding: 2.5em .5em 0 .5em;
+			text-align: left;
+			width: 3em;
+			b {
+				border-radius: 0 0 1px 1px;
+				box-sizing: border-box;
+				display: block;
+				left: 0;
+				padding: .75em 1em .5em;
+				position: absolute;
+				visibility: hidden;
+				width: 3em;
+				text-indent: -9999em;
+				top: 0;
+				z-index: 1;
+				@include transition(top 100ms $bounce 100ms, background 0s linear 100ms, text-indent 0s linear 120ms);
+				&:before {
+					background: $plum;
+					content: "";
+					display: block;
+					height: 2.5em;
+					left: 0;
+					position: absolute;
+					top: 0;
+					width: 100%;
+					z-index: 2;
+				}
+			}
+			&:hover, &:focus {
+				padding-left: .5em;
+				b {
+					background: darken($plum, 2%);
+					visibility: visible;
+					width: auto;
+					text-indent: 0;
+					top: 2.5em;
+					&:before {
+						top: -2.25em;
+					}
+				}
+			}
 		}
 		$noms: cookies cake brownies bread candy other;
 		@each $nom in $noms {
-			&.#{$nom}:after {
-				background: image-url("#{$nom}.svg") no-repeat center/85% auto;
+			&.#{$nom} {
+				&:after {
+					background: image-url("#{$nom}.svg") no-repeat center/85% auto;
+				}
+				&:hover, &:focus {
+					&:after {
+						background-size: 100% auto;
+					}
+				}
 			}
 		}
 	}
