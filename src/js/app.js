@@ -1,3 +1,5 @@
+var menuBreak = window.matchMedia('(min-width: 599px)');
+
 var nomsbase = angular.module('nomsbase',['ngRoute']).
 	config(function($routeProvider, $locationProvider) {
 		$routeProvider.when('/recipe/:id/:name', {
@@ -25,6 +27,38 @@ var nomsbase = angular.module('nomsbase',['ngRoute']).
 		  requireBase: false
 		});
 	});
+
+//main nav
+nomsbase.controller('NavMenu', function($scope, $rootScope, $location) {
+	$scope.location = $location.$$path;
+	$scope.searchTerm = '';
+	$scope.search = function(e) {
+		e.preventDefault();
+		if ($scope.searchTerm.trim().length === 0) {
+			document.querySelector('[data-ng-model="searchTerm"]').focus();
+		}
+		else {
+			window.location.href = '/recipes/' + $scope.searchTerm;
+		}
+	}
+	$rootScope.menuOpen = false;
+
+	$rootScope.toggleMenu = function(e) {
+		e.preventDefault();
+		if (!menuBreak.matches) {
+			$rootScope.$evalAsync(function() {
+				$rootScope.menuOpen = !$rootScope.menuOpen;
+			});
+		}
+	};
+
+	menuBreak.addListener(function() {
+		$rootScope.$evalAsync(function() {
+			$rootScope.menuOpen = false;
+		});
+	});
+});
+
 
 nomsbase.controller('New', function ($scope, $http) {
 	$scope.recipe = {};
@@ -121,15 +155,17 @@ nomsbase.controller('Search', function($scope, $http, $routeParams) {
 	else var id = $routeParams.id.split('-').join(' ');
 	$scope.data.searchTerm = id;
 	$http({method:'GET', url: '/search/'+id}).
-		success(function(data, status, headers, config) {
-			$scope.data.recipes = data;
+		success(function(data, status, headers, config) {	
 			if (data.length > 0) {
-				$.each($scope.data.recipes, function(index, value) {
-					value['idName'] = value.name.split(' ').join('-').toLowerCase();
-				});
+				$scope.data.recipes = data;
 			}
 			else {
-				$('div[ng-view]').append($('<p>No results found. You\'re doomed.</p>'));
+				$http({method:'GET', url: '/partials/no-results'})
+					.success(function(data, status, headers, config) {
+						if (typeof data === 'string') {
+							document.getElementsByTagName('main')[0].innerHTML = data;
+						}
+					});
 			}
 		});
 });

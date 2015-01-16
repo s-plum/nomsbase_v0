@@ -14,7 +14,7 @@
     </main>
     <nav data-ng-controller="NavMenu" data-ng-class="{ home: location === '/', open: menuOpen }">
         <div>
-            <h1 id="nav-label">nomsbase</h1>
+            <h1 id="nav-label"><a href="/">nomsbase</a></h1>
             <div class="nav-actions">
                 <ul id="nav" aria-labelledby="nav-label">
                     <li><a href="#" class="cake"><b>cake</b></a></li>
@@ -24,9 +24,10 @@
                     <li><a href="#" class="candy"><b>candy</b></a></li>
                     <li><a href="#" class="other"><b>other</b></a></li>
                 </ul>
-                <form class="search" action="/recipes/">
+                <form data-ng-submit="search($event)" novalidate>
                     <label for="search">Search</label>
-                    <input type="search" id="search" placeholder="search" name="q" autocomplete="off"/>
+                    <input type="search" id="search" placeholder="search" data-ng-model="searchTerm" name="searchTerm" autocomplete="off" required="required" aria-required="true"/>
+                    <button type="submit" data-ng-disabled="">Go</button>
                 </form>
             </div>
         </div>

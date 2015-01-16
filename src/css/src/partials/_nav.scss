@@ -19,8 +19,11 @@ nav {
 			float: left;
 			padding: 12px 0 8px;
 		}
-		b {
-			@extend %wai;
+		a {
+			color: #fff;
+			&:hover, &:focus {
+				text-decoration: none;
+			}
 		}
 	}
 	.nav-actions {
@@ -62,13 +65,13 @@ nav {
 		}
 		input {
 			@extend %borderbox;
-			background: inline-image("whisk.svg") darken($plum, 2%) no-repeat 3px 2px/25px 25px;
+			background: darken($plum, 2%);
 			border: none;
 			border-radius: 3px;
 			box-shadow: -1px -1px 2px 0 rgba(0,0,0,.5);
 			color: rgba(255,255,255,.75);
 			font-size: 16px;
-			padding: 5px 5px 5px 35px;
+			padding: 5px 35px 5px 5px;
 			width: 100%;
 			-webkit-appearance: none;
 			@include breakpoint($small) {
@@ -98,6 +101,26 @@ nav {
 			   color: rgba(255,255,255,.4);
 			}
 		}
+		button {
+			background: inline-image("whisk.svg") no-repeat 3px 2px/26px 25px;
+			border: 0;
+			bottom: 0;
+			outline: none;
+			overflow: hidden;
+			position: absolute;
+			right: 10px;
+			text-indent: -9999em;
+			top: 0;
+			width: 33px;
+			@include breakpoint($small) {
+				bottom: .5em;
+				right: 0;
+				top: .5em;
+			}
+			&[disabled="disabled"] {
+				opacity: .75;
+			}
+		}
 	}
 	ul {
 		@extend %display-flex;
@@ -122,9 +145,10 @@ nav {
 			}
 		}
 	}
-	a {
+	ul a {
 		background: $plum;
 		box-sizing: border-box;
+		color: #fff;
 		display: block;
 		padding: .75em 0 .75em 3.5em;
 		position: relative;
