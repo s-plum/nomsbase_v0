@@ -4,30 +4,58 @@ nav {
 	background: $plum;
 	padding: 10px 0;
 	@include breakpoint($small) {
-		display: -ms-flex;
-		display: -webkit-flex;
-		display: flex;
 		padding: 0 10px;
-		@include flex-property(justify-content, flex-end);
+	}
+	> div {
+		margin: 0 auto;
+		max-width: $max;
 	}
 	h1 {
+		color: #fff;
 		line-height: .75em;
 		margin: 0;
 		padding: 0 10px;
 		@include breakpoint($small) {
-			@include flex-property(flex, 1 0 auto);
+			float: left;
 			padding: 12px 0 8px;
 		}
 		b {
 			@extend %wai;
 		}
 	}
+	.nav-actions {
+		@extend %display-flex;
+		@include flex-property(flex-flow, row wrap);
+		@include flex-property(justify-content, space-between);
+		@include breakpoint($small) {
+			float: right;
+		}
+	}
+	.js & {
+		.nav-actions {
+			max-height: 0;
+			overflow: hidden;
+			@include transition(all 150ms ease);
+			@include breakpoint($small) {
+				max-height: none;
+				overflow: visible;
+			}
+		}
+		&.open {
+			.nav-actions {
+				max-height: 13em;
+			}
+		}
+	}
 	form {
+		box-sizing: border-box;
 		padding: 0 10px;
 		position: relative;
+		width: 100%;
 		z-index: 5;
 		@include breakpoint($small) {
 			padding: .5em 0 0 10px;
+			width: auto;
 		}
 		label {
 			@extend %wai;

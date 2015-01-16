@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="nomsbase" class="no-js">
+<html lang="en" data-ng-app="nomsbase" class="no-js">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -8,24 +8,28 @@
     <script>document.getElementsByTagName('html')[0].className = document.getElementsByTagName('html')[0].className.replace('no-js','js');</script>
 </head>
 <body>
-    <a href="#nav" id="skip-to-nav">Skip to Navigation</a>
+    <a href="#nav" id="skip-to-nav" data-ng-click="toggleMenu($event)" data-ng-class="{ open: menuOpen }">Skip to Navigation</a>
     <main>
         <%- body %>
     </main>
-    <nav <%if (title == 'nomsbase') { %>class="home"<% } %>>
-        <h1 id="nav-label">nomsbase</h1>
-        <ul id="nav" aria-labelledby="nav-label">
-            <li><a href="#" class="cake"><b>cake</b></a></li>
-            <li><a href="#" class="cookies"><b>cookies</b></a></li>
-            <li><a href="#" class="brownies"><b>brownies/bars</b></a></li>
-            <li><a href="#" class="bread"><b>bread</b></a></li>
-            <li><a href="#" class="candy"><b>candy</b></a></li>
-            <li><a href="#" class="other"><b>other</b></a></li>
-        </ul>
-        <form class="search" action="/recipes/">
-            <label for="search">Search</label>
-            <input type="search" id="search" placeholder="search" name="q" autocomplete="off"/>
-        </form>
+    <nav data-ng-controller="NavMenu" data-ng-class="{ home: location === '/', open: menuOpen }">
+        <div>
+            <h1 id="nav-label">nomsbase</h1>
+            <div class="nav-actions">
+                <ul id="nav" aria-labelledby="nav-label">
+                    <li><a href="#" class="cake"><b>cake</b></a></li>
+                    <li><a href="#" class="cookies"><b>cookies</b></a></li>
+                    <li><a href="#" class="brownies"><b>brownies/bars</b></a></li>
+                    <li><a href="#" class="bread"><b>bread</b></a></li>
+                    <li><a href="#" class="candy"><b>candy</b></a></li>
+                    <li><a href="#" class="other"><b>other</b></a></li>
+                </ul>
+                <form class="search" action="/recipes/">
+                    <label for="search">Search</label>
+                    <input type="search" id="search" placeholder="search" name="q" autocomplete="off"/>
+                </form>
+            </div>
+        </div>
     </nav>
     <script src="/js/main.js"></script>
 </body>

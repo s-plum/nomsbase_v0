@@ -96,16 +96,22 @@ nomsbase.controller('Edit', function($scope, $http, $routeParams) {
 nomsbase.controller('View', function($scope, $http, $routeParams) {
 	$scope.recipe = {};
 	var id = $routeParams.id;
-	$http({method:'GET', url: '/get/'+id}).
-		success(function(data, status, headers, config) {
-			if (typeof data == 'object') {
+	$http({method:'GET', url: '/get/'+id})
+		.success(function(data, status, headers, config) {
+			if (!data.error) {
 				$scope.recipe = data;
 			}
 			else {
-				$.get('/partials/no-results', function(response) {
-					$('div[ng-view]').replaceWith($(response));
-				})
+				$http({method:'GET', url: '/partials/no-results'})
+					.success(function(data, status, headers, config) {
+						if (typeof data === 'string') {
+							document.getElementsByTagName('main')[0].innerHTML = data;
+						}
+					});
 			}
+		})
+		.error(function() {
+			console.log('error');
 		});
 });
 
@@ -141,3 +147,5 @@ nomsbase.directive('ngEnter', function () {
         });
     };
 });
+
+module.exports = nomsbase;

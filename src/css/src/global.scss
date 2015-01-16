@@ -1,8 +1,8 @@
 @import "compass/css3", "compass/support", "utilities/normalize", "utilities/fonts", "utilities/functions", "utilities/mixins", "utilities/variables", "partials/nav", "partials/forms";
 
 body {
-	background: #fff;
-	color: #fff;
+	background: #f5f5f5;
+	color: #222;
 	font: 300 1rem/125% 'Roboto Condensed', Arial, Helvetica, sans-serif;
 	margin: 0;
 	padding: 0;
@@ -21,6 +21,14 @@ a {
 
 main {
 	@include flex-property(order, 2);
+	box-sizing: border-box;
+	margin: 0 auto;
+	max-width: $max;
+	padding: 0 10px;
+	width: 100%;
+	@include breakpoint($max + 10px) {
+		padding: 0;
+	}
 }
 
 #skip-to-nav {
@@ -33,12 +41,12 @@ main {
 		display: block;
 		height: 50px;	
 		right: 2px;
-		top: -10px;
+		top: -15px;
 		width: 50px;
 		z-index: 2;
 		-webkit-backface-visibility: hidden;
 		@include transition(top 200ms $bounce);
-		&:hover, &:focus {
+		&:hover, &:focus, &.open {
 			background: inline-image("menu-open.png") no-repeat center / 100% auto;
 			top: 0px;
 		}
