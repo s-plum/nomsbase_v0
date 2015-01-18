@@ -1,6 +1,5 @@
 //declare dependencies
 var express = require('express'), //templating
-	partials = require('express-partials'),
 	routes = require('./routes'),
 	http = require('http'),
 	path = require('path'),
@@ -19,10 +18,6 @@ db.once('connected', function() {
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
-app.use(partials());
-app.engine('ejs', require('ejs').renderFile);
-app.set('views', path.join(__dirname, distPath + '/views'));
-app.set('view engine', 'ejs');
 app.use(express.favicon(path.join(__dirname, distPath + '/img/favicon.ico')));
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -37,12 +32,11 @@ if ('development' == app.get('env')) {
 
 //for views
 app.get('/', routes.index);
-app.get('/recipe/:id/:name', routes.recipe(db));
-app.get('/new', routes.new);
-app.get('/recipes', routes.recipes);
-app.get('/recipes/:query', routes.recipes);
-app.get('/edit/:id/:name', routes.edit(db));
-app.get('/partials/:name', routes.partials);
+app.get('/recipe/:id/:name', routes.index);
+app.get('/new', routes.index);
+app.get('/recipes', routes.index);
+app.get('/recipes/:query', routes.index);
+app.get('/edit/:id/:name', routes.index);
 
 //data get/set
 app.post('/add', api.add(db));
@@ -51,7 +45,7 @@ app.get('/get/:id', api.get(db));
 app.get('/search/:query', api.search(db));
 
 app.use(function(req, res, next){
-    res.status(404).render('404', {title: "Sorry, page not found"});
+    res.status(404).sendfile(path.resolve(__dirname + '/dist/index.html'));
 });
 
 http.createServer(app).listen(app.get('port'), function(){

@@ -1,61 +1,79 @@
-var menuBreak = window.matchMedia('(min-width: 599px)');
+var menuBreak = window.matchMedia('(min-width: 650px)');
 
-var nomsbase = angular.module('nomsbase',['ngRoute']).
-	config(function($routeProvider, $locationProvider) {
+var nomsbase = angular.module('nomsbase',['ngRoute'])
+	.config(function($routeProvider, $locationProvider) {
+		$routeProvider.when('/', {});
 		$routeProvider.when('/recipe/:id/:name', {
-			templateUrl: '/partials/view',
+			templateUrl: '/templates/view.html',
 			controller: 'View'
 		});
 		$routeProvider.when('/recipes/:id', {
 			controller: 'Search',
-			templateUrl: '/partials/search'
-		});
-		$routeProvider.when('/recipes', {
-			controller: 'Search',
-			templateUrl: '/partials/search'
+			templateUrl: '/templates/search.html'
 		});
 		$routeProvider.when('/new', {
-			templateUrl: '/partials/edit',
+			templateUrl: '/templates/edit.html',
 			controller: 'New'
 		});
 		$routeProvider.when('/edit/:id', {
-			templateUrl: '/partials/edit',
+			templateUrl: '/templates/edit.html',
 			controller: 'Edit'
 		});
+		$routeProvider.when('/404', {
+			templateUrl: '/templates/404.html'
+		});
+		$routeProvider.otherwise({
+			redirectTo: '/404'
+		})
 		$locationProvider.html5Mode({
 		  enabled: true,
 		  requireBase: false
 		});
 	});
 
-//main nav
-nomsbase.controller('NavMenu', function($scope, $rootScope, $location) {
-	$scope.location = $location.$$path;
+nomsbase.factory('Page',function() {
+	var title = 'nomsbase';
+	return {
+		title: function() { return title; },
+		setTitle: function(newTitle) { title = newTitle }
+	}
+});
+
+nomsbase.controller('MainCtrl', function($scope, $location, Page) {
+	$scope.Page = Page;
 	$scope.searchTerm = '';
-	$scope.search = function(e) {
+	$scope.searchRecipes = function(e) {
 		e.preventDefault();
-		if ($scope.searchTerm.trim().length === 0) {
-			document.querySelector('[data-ng-model="searchTerm"]').focus();
+		var searchInput = document.querySelector('[data-ng-model="searchTerm"]');
+		if ($scope.searchTerm.length === 0 || $scope.searchTerm.trim().length === 0) {
+			searchInput.focus();
 		}
 		else {
-			window.location.href = '/recipes/' + $scope.searchTerm;
+			$location.path('/recipes/' + $scope.searchTerm);
+			$scope.menuOpen = false;
+			$scope.searchTerm = '';
+			searchInput.blur();
 		}
 	}
-	$rootScope.menuOpen = false;
+	$scope.menuOpen = false;
+	$scope.isHome = function() {
+		return $location.$$path === '/';
+	};
 
-	$rootScope.toggleMenu = function(e) {
+	$scope.toggleMenu = function(e) {
 		e.preventDefault();
 		if (!menuBreak.matches) {
-			$rootScope.$evalAsync(function() {
-				$rootScope.menuOpen = !$rootScope.menuOpen;
-			});
+			$scope.menuOpen = !$scope.menuOpen;
 		}
 	};
 
+	$scope.toHome = function() {
+		Page.setTitle('nomsbase');
+		$scope.menuOpen = false;
+	};
+
 	menuBreak.addListener(function() {
-		$rootScope.$evalAsync(function() {
-			$rootScope.menuOpen = false;
-		});
+		$scope.menuOpen = false;
 	});
 });
 
@@ -127,12 +145,13 @@ nomsbase.controller('Edit', function($scope, $http, $routeParams) {
 	};
 });
 
-nomsbase.controller('View', function($scope, $http, $routeParams) {
+nomsbase.controller('View', function($scope, $http, $routeParams, Page) {
 	$scope.recipe = {};
 	var id = $routeParams.id;
 	$http({method:'GET', url: '/get/'+id})
 		.success(function(data, status, headers, config) {
 			if (!data.error) {
+				Page.setTitle(data.name);
 				$scope.recipe = data;
 			}
 			else {
@@ -149,24 +168,19 @@ nomsbase.controller('View', function($scope, $http, $routeParams) {
 		});
 });
 
-nomsbase.controller('Search', function($scope, $http, $routeParams) {
-	$scope.data = [];
-	if (typeof $routeParams.q != 'undefined') var id = $routeParams.q;
-	else var id = $routeParams.id.split('-').join(' ');
-	$scope.data.searchTerm = id;
-	$http({method:'GET', url: '/search/'+id}).
-		success(function(data, status, headers, config) {	
-			if (data.length > 0) {
-				$scope.data.recipes = data;
-			}
-			else {
-				$http({method:'GET', url: '/partials/no-results'})
-					.success(function(data, status, headers, config) {
-						if (typeof data === 'string') {
-							document.getElementsByTagName('main')[0].innerHTML = data;
-						}
-					});
-			}
+nomsbase.controller('Search', function($scope, $http, $location, $routeParams, Page) {
+	$scope.resultsLoaded = false;
+	var id = $routeParams.id.split('-').join(' ');
+	Page.setTitle(id + ' recipes');
+	$scope.searchTerm = id;
+	$scope.recipes = [];
+	$http({method:'GET', url: '/search/'+id})
+		.success(function(data, status, headers, config) {	
+			$scope.recipes = data;
+			$scope.resultsLoaded = true;
+		})
+		.error(function() {
+			$scope.resultsLoaded = true;
 		});
 });
 

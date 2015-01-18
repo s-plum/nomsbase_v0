@@ -6,8 +6,15 @@ body {
 	font: 300 1rem/125% 'Roboto Condensed', Arial, Helvetica, sans-serif;
 	margin: 0;
 	padding: 0;
+	visibility: hidden;
 	@extend %display-flex;
 	@include flex-property(flex-flow, column);
+	&.home {
+		background: $plum;
+	}
+	&[screen_capture_injected="true"] {
+		visibility: visible;
+	}
 }
 
 h1, h2 {
@@ -31,30 +38,5 @@ main {
 	width: 100%;
 	@include breakpoint($max + 10px) {
 		padding: 0;
-	}
-}
-
-#skip-to-nav {
-	overflow: hidden;
-	position: absolute;
-	text-indent: -9999em;
-	z-index: -1;
-	.js & {
-		background: inline-image("menu-closed.png") no-repeat center / 100% auto;
-		display: block;
-		height: 50px;	
-		right: 2px;
-		top: -15px;
-		width: 50px;
-		z-index: 2;
-		-webkit-backface-visibility: hidden;
-		@include transition(top 200ms $bounce);
-		&:hover, &:focus, &.open {
-			background: inline-image("menu-open.png") no-repeat center / 100% auto;
-			top: 0px;
-		}
-		@include breakpoint($small) {
-			display: none;
-		}
 	}
 }

@@ -1,29 +1,146 @@
+#skip-to-nav {
+	overflow: hidden;
+	position: absolute;
+	text-indent: -9999em;
+	z-index: -1;
+	.js & {
+		background: inline-image("menu-closed.png") no-repeat center / 100% auto;
+		display: block;
+		height: 50px;	
+		right: 2px;
+		top: -15px;
+		width: 50px;
+		z-index: 2;
+		-webkit-backface-visibility: hidden;
+		@include transition(top 200ms $bounce);
+		&:hover, &:focus, &.open {
+			background: inline-image("menu-open.png") no-repeat center / 100% auto;
+			top: 0px;
+		}
+		@include breakpoint($small) {
+			display: none;
+		}
+	}
+	.home & {
+		display: none;
+	}
+}
+
 nav {
 	@extend %borderbox;
 	@include flex-property(order, 1);
-	background: $plum;
-	padding: 10px 0;
-	@include breakpoint($small) {
-		padding: 0 10px;
-	}
-	> div {
-		margin: 0 auto;
-		max-width: $max;
-	}
+
 	h1 {
 		color: #fff;
-		line-height: .75em;
 		margin: 0;
-		padding: 0 10px;
-		@include breakpoint($small) {
-			float: left;
-			padding: 12px 0 8px;
-		}
 		a {
 			color: #fff;
 			&:hover, &:focus {
 				text-decoration: none;
 			}
+		}
+	}
+
+	ul a {
+		box-sizing: border-box;
+		display: block;
+		position: relative;
+		b {
+			font-weight: normal;
+		}
+		&:before, &:after {
+			content: "";
+			display: block;
+			position: absolute;		
+		}
+		$noms: cookies cake brownies bread candy other;
+		@each $nom in $noms {
+			&.#{$nom} {
+				&:after {
+					background: image-url("#{$nom}.svg") no-repeat center/85% auto;
+				}
+				&:hover, &:focus {
+					&:after {
+						background-size: 100% auto;
+					}
+				}
+			}
+		}
+	}
+
+	form {
+		box-sizing: border-box;
+		p {
+			margin: 0;
+			position: relative;
+		}
+		label {
+			@extend %wai;
+		}
+		input {
+			@extend %borderbox;
+			background: darken($plum, 2%);
+			border: none;
+			border-radius: 3px;
+			box-shadow: -1px -1px 2px 0 rgba(0,0,0,.5);
+			color: rgba(255,255,255,.75);
+			font-size: 16px;
+			padding: 5px 35px 5px 5px;
+			width: 100%;
+			-webkit-appearance: none;
+			&:focus {
+				background-color: darken($plum, 5%);
+				outline: 0;
+			}
+			&::-webkit-input-placeholder {
+			   color: rgba(255,255,255,.4);
+			}
+
+			&:-moz-placeholder { /* Firefox 18- */
+			   color: rgba(255,255,255,.4);
+			}
+
+			&::-moz-placeholder {  /* Firefox 19+ */
+			   color: rgba(255,255,255,.4);
+			}
+
+			&:-ms-input-placeholder {  
+			   color: rgba(255,255,255,.4);
+			}
+		}
+		button {
+			background: inline-image("whisk.svg") no-repeat 3px 2px/26px 25px;
+			border: 0;
+			bottom: 0;
+			outline: none;
+			overflow: hidden;
+			position: absolute;
+			right: 2px;
+			text-indent: -9999em;
+			top: 0;
+			width: 33px;
+		}
+	}
+}
+
+nav:not(.home) {
+	background: $plum;
+	padding: 10px 0;
+	@include breakpoint($small) {
+		padding: 0 10px;
+	}
+
+	> div {
+		margin: 0 auto;
+		max-width: $max;
+	}
+	
+	h1 {
+		line-height: .75em;
+		padding: 0 10px;
+		@include breakpoint($small) {
+			float: left;
+			padding: 12px 0 8px;
 		}
 	}
 	.nav-actions {
@@ -51,74 +168,20 @@ nav {
 		}
 	}
 	form {
-		box-sizing: border-box;
 		padding: 0 10px;
-		position: relative;
 		width: 100%;
 		z-index: 5;
 		@include breakpoint($small) {
 			padding: .5em 0 0 10px;
 			width: auto;
 		}
-		label {
-			@extend %wai;
-		}
 		input {
-			@extend %borderbox;
-			background: darken($plum, 2%);
-			border: none;
-			border-radius: 3px;
-			box-shadow: -1px -1px 2px 0 rgba(0,0,0,.5);
-			color: rgba(255,255,255,.75);
-			font-size: 16px;
-			padding: 5px 35px 5px 5px;
-			width: 100%;
-			-webkit-appearance: none;
 			@include breakpoint($small) {
 				width: 6em; 
 				@include transition(width 100ms ease);
 				&:focus {
 					width: 11em;
 				}
-			}
-			&:focus {
-				background-color: darken($plum, 5%);
-				outline: none;
-			}
-			&::-webkit-input-placeholder {
-			   color: rgba(255,255,255,.4);
-			}
-
-			&:-moz-placeholder { /* Firefox 18- */
-			   color: rgba(255,255,255,.4);
-			}
-
-			&::-moz-placeholder {  /* Firefox 19+ */
-			   color: rgba(255,255,255,.4);
-			}
-
-			&:-ms-input-placeholder {  
-			   color: rgba(255,255,255,.4);
-			}
-		}
-		button {
-			background: inline-image("whisk.svg") no-repeat 3px 2px/26px 25px;
-			border: 0;
-			bottom: 0;
-			outline: none;
-			overflow: hidden;
-			position: absolute;
-			right: 10px;
-			text-indent: -9999em;
-			top: 0;
-			width: 33px;
-			@include breakpoint($small) {
-				bottom: .5em;
-				right: 0;
-				top: .5em;
-			}
-			&[disabled="disabled"] {
-				opacity: .75;
 			}
 		}
 	}
@@ -147,20 +210,9 @@ nav {
 	}
 	ul a {
 		background: $plum;
-		box-sizing: border-box;
 		color: #fff;
-		display: block;
 		padding: .75em 0 .75em 3.5em;
-		position: relative;
 		@include transition(padding-left 150ms ease);
-		b {
-			font-weight: normal;
-		}
-		&:before, &:after {
-			content: "";
-			display: block;
-			position: absolute;		
-		}
 		&:before {
 			background: rgba(255,255,255,1);
 			height: 100%;
@@ -242,17 +294,47 @@ nav {
 				}
 			}
 		}
-		$noms: cookies cake brownies bread candy other;
-		@each $nom in $noms {
-			&.#{$nom} {
-				&:after {
-					background: image-url("#{$nom}.svg") no-repeat center/85% auto;
-				}
-				&:hover, &:focus {
-					&:after {
-						background-size: 100% auto;
-					}
-				}
+	}
+}
+
+nav.home {
+	margin-top: 8%;
+	@include breakpoint($small){
+		margin-top: 5%;
+	}
+
+	h1 {
+		text-align: center;
+		a {
+			font-size: 2.75em;
+			letter-spacing: -.05em;
+			@include breakpoint($small){
+				font-size: 5em;
+			}
+		}
+	}
+
+	.nav-actions {
+		background: $plum;
+	}
+
+	ul {
+		background: $plum;
+	}
+
+	ul a {
+		&:after {
+
+		}
+	}
+
+	form {
+		padding: 10px;
+		p {
+			margin: 0 auto;
+			max-width: 16em;
+			@include breakpoint($small) {
+				max-width: 25em;
 			}
 		}
 	}

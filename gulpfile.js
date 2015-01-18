@@ -19,15 +19,17 @@ var gulp = require('gulp'),
   srcPaths = {
     css: srcPath + '/css/**/*.css',
     sass: srcPath + '/css/src/**/*.scss',
-    ejs: srcPath + '/views/**/*.ejs',
+    html: srcPath + '/*.html',
     img: srcPath + '/img/**/*',
-    js: srcPath + '/js/**/*.js'
+    js: srcPath + '/js/**/*.js',
+    templates: srcPath + '/templates/**/*.html'
   },
   distPaths = {
     css: distPath + '/css',
-    ejs: distPath + '/views',
+    html: distPath + '/',
     img: distPath + '/img',
-    js: distPath + '/js'
+    js: distPath + '/js',
+    templates: distPath + '/templates'
   };
 
 gulp.task('server', function() {
@@ -41,9 +43,15 @@ gulp.task('watch:scripts', function() {
   gulp.watch('', ['scripts']);
 });
 
-gulp.task('watch:ejs', function() {
-  watch(srcPaths.ejs, function(files, cb) {
-    gulp.start('ejs', cb);
+gulp.task('watch:templates', function() {
+  watch(srcPaths.templates, function(files, cb) {
+    gulp.start('templates', cb);
+  });
+});
+
+gulp.task('watch:html', function() {
+  watch(srcPaths.html, function(files, cb) {
+    gulp.start('html', cb);
   });
 });
 
@@ -59,7 +67,7 @@ gulp.task('watch:sass', function() {
   });
 });
 
-gulp.task('watch', ['watch:scripts','watch:ejs','watch:images','watch:sass']);
+gulp.task('watch', ['watch:scripts','watch:templates', 'watch:html','watch:images','watch:sass']);
 
 gulp.task('clean:images', function (cb) {
   del([distPaths.img + '/*'], cb)
@@ -93,13 +101,22 @@ gulp.task('sassy', function() {
 });
  
 
-gulp.task('ejs', function() {
-	gulp.src(srcPaths.ejs)
+gulp.task('templates', function() {
+	gulp.src(srcPaths.templates)
 		.pipe(plumber({
       errorHandler: onError
     }))
-    .pipe(gulp.dest(distPaths.ejs))
+    .pipe(gulp.dest(distPaths.templates))
 		.pipe(livereload());
+});
+
+gulp.task('html', function() {
+  gulp.src(srcPaths.html)
+    .pipe(plumber({
+      errorHandler: onError
+    }))
+    .pipe(gulp.dest(distPaths.html))
+    .pipe(livereload());
 });
 
 gulp.task('images', ['clean:images'], function() {
@@ -108,5 +125,4 @@ gulp.task('images', ['clean:images'], function() {
     .pipe(livereload());
 });
 
-
-gulp.task('default', ['scripts', 'ejs', 'sassy', 'images', 'watch' ,'server']);
+gulp.task('default', ['scripts', 'templates', 'html', 'sassy', 'images', 'watch' ,'server']);
