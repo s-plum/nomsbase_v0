@@ -42,6 +42,7 @@ nomsbase.factory('Page',function() {
 nomsbase.controller('MainCtrl', function($scope, $location, Page) {
 	$scope.Page = Page;
 	$scope.searchTerm = '';
+
 	$scope.searchRecipes = function(e) {
 		e.preventDefault();
 		var searchInput = document.querySelector('[data-ng-model="searchTerm"]');
@@ -61,7 +62,7 @@ nomsbase.controller('MainCtrl', function($scope, $location, Page) {
 	};
 
 	$scope.toggleMenu = function(e) {
-		e.preventDefault();
+		if (e) { e.preventDefault(); }
 		if (!menuBreak.matches) {
 			$scope.menuOpen = !$scope.menuOpen;
 		}
@@ -75,6 +76,19 @@ nomsbase.controller('MainCtrl', function($scope, $location, Page) {
 	menuBreak.addListener(function() {
 		$scope.menuOpen = false;
 	});
+
+	//animation of nav on first load
+	$scope.homeLoaded = false;
+
+	if (!$scope.homeLoaded) {
+		setTimeout(function() {
+			$scope.$apply(function() {
+				$scope.homeLoaded = true;	
+			});
+		}, 500);
+	}
+
+	$scope.loaded = true;
 });
 
 

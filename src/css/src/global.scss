@@ -12,7 +12,7 @@ body {
 	&.home {
 		background: $plum;
 	}
-	&[screen_capture_injected="true"] {
+	&[data-loaded="true"] {
 		visibility: visible;
 	}
 }
@@ -30,6 +30,7 @@ a {
 }
 
 main {
+	-ms-flex-order: 2;
 	@include flex-property(order, 2);
 	box-sizing: border-box;
 	margin: 0 auto;

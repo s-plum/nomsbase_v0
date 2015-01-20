@@ -72,7 +72,7 @@ extends
 
 //flexbox prefix helpers
 %display-flex {
-	display: -ms-flex;
+	display: -ms-flexbox;
 	display: -webkit-flex;
 	display: flex;
 }

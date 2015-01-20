@@ -1,3 +1,37 @@
+@mixin navLinkDrop {
+	border-radius: 0 0 1px 1px;
+	box-sizing: border-box;
+	display: block;
+	left: 0;
+	padding: .75em 1em .5em;
+	position: absolute;
+	visibility: hidden;
+	text-indent: -9999em;
+	z-index: 1;
+	
+	&:before {
+		background: $plum;
+		content: "";
+		display: block;
+		height: 2.5em;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+		z-index: 2;
+	}
+}
+
+@mixin navLinkDropHover {
+	background: darken($plum, 2%);
+	text-indent: 0;
+	visibility: visible;
+
+	&:before {
+		top: -2.25em;
+	}
+}
+
 #skip-to-nav {
 	overflow: hidden;
 	position: absolute;
@@ -27,7 +61,9 @@
 }
 
 nav {
+	background: $plum;
 	@extend %borderbox;
+	-ms-flex-order: 1;
 	@include flex-property(order, 1);
 
 	h1 {
@@ -41,27 +77,72 @@ nav {
 		}
 	}
 
-	ul a {
-		box-sizing: border-box;
-		display: block;
-		position: relative;
-		b {
-			font-weight: normal;
+	ul {
+		@extend %display-flex;
+		@include flex-property(flex-flow, row wrap);
+		@include flex-property(justify-content, space-between);
+		clear: both;
+		list-style: none;
+		margin: 10px 0;
+		padding: 0;
+		width: 100%;
+		@include breakpoint($small) {
+			@include flex-property(flex-flow, row nowrap);
+			margin: 0;
+			width: auto;
 		}
-		&:before, &:after {
-			content: "";
+
+		li {
+			margin-bottom: .25em;
+		}
+
+		a {
+			background: $plum;
+			box-sizing: border-box;
+			color: #fff;
 			display: block;
-			position: absolute;		
-		}
-		$noms: cookies cake brownies bread candy other;
-		@each $nom in $noms {
-			&.#{$nom} {
-				&:after {
-					background: image-url("#{$nom}.svg") no-repeat center/85% auto;
+			position: relative;
+
+			b {
+				font-weight: normal;
+			}
+
+			&:before, &:after {
+				content: "";
+				display: block;
+				position: absolute;		
+			}
+
+			&:before {
+				background: #fff;
+				left: 0;
+				top: 0;
+				z-index: 3;
+			}
+
+			&:after {
+				@include transition(all 100ms ease);
+				z-index: 4;
+			}
+
+			&:hover, &:focus {
+				text-decoration: none;
+
+				&:before {
+					z-index: 3;
 				}
-				&:hover, &:focus {
+			}
+
+			$noms: cookies cake brownies bread candy other;
+			@each $nom in $noms {
+				&.#{$nom} {
 					&:after {
-						background-size: 100% auto;
+						background: image-url("#{$nom}.svg") no-repeat center/85% auto;
+					}
+					&:hover, &:focus {
+						&:after {
+							background-size: 100% auto;
+						}
 					}
 				}
 			}
@@ -70,13 +151,16 @@ nav {
 
 	form {
 		box-sizing: border-box;
+
 		p {
 			margin: 0;
 			position: relative;
 		}
+
 		label {
 			@extend %wai;
 		}
+
 		input {
 			@extend %borderbox;
 			background: darken($plum, 2%);
@@ -108,6 +192,7 @@ nav {
 			   color: rgba(255,255,255,.4);
 			}
 		}
+
 		button {
 			background: inline-image("whisk.svg") no-repeat 3px 2px/26px 25px;
 			border: 0;
@@ -124,7 +209,6 @@ nav {
 }
 
 nav:not(.home) {
-	background: $plum;
 	padding: 10px 0;
 	@include breakpoint($small) {
 		padding: 0 10px;
@@ -163,10 +247,91 @@ nav:not(.home) {
 		}
 		&.open {
 			.nav-actions {
-				max-height: 13em;
+				max-height: 22em;
+				@include breakpoint($micro) {
+					max-height: 13em;
+				}
 			}
 		}
 	}
+
+	ul {
+		li {
+			width: 100%;
+			@include breakpoint($micro) {
+				width: 49%;
+			}
+			@include breakpoint($small) {
+				margin: 0;
+				width: auto;
+			}
+		}
+
+		a {
+			padding: .75em 0 .75em 3.5em;
+			@include transition(padding-left 150ms ease);
+
+			&:before {
+				height: 100%;
+				width: 0;
+				@include transition(all 200ms $bounce);
+				@include breakpoint($small) {
+					height: 0;
+					right: 0;
+				}
+			}
+
+			&:after {
+				height: 2.5em;
+				left: 10px;
+				top: .125em;
+				width: 2.5em;
+				
+				@include breakpoint($small) {
+					left: .25em;
+				}
+			}
+
+			&:hover, &:focus {
+				background: rgba(0,0,0,.125);
+				padding-left: 4.25em;
+				@include transition(padding-left 200ms cubic-bezier(0.175, 1.75, 0.7, 1.275));
+				
+				&:before {
+					width: 3.75em;
+					@include breakpoint($small) {
+						height: 2.75em;
+						width: auto;
+					}
+				}
+			}
+
+			@include breakpoint($small) {
+				height: 2.75em;
+				padding: 2.5em .5em 0 .5em;
+				text-align: left;
+				width: 3em;
+
+				b {
+					@include navLinkDrop;
+					width: 3em;
+					top: 0;
+					@include transition(top 100ms $bounce 100ms, background 0s linear 100ms, text-indent 0s linear 120ms);
+				}
+
+				&:hover, &:focus {
+					padding-left: .5em;
+
+					b {
+						@include navLinkDropHover;
+						top: 2.5em;
+						width: auto;
+					}
+				}
+			}
+		}
+	}
+	
 	form {
 		padding: 0 10px;
 		width: 100%;
@@ -185,131 +350,41 @@ nav:not(.home) {
 			}
 		}
 	}
-	ul {
-		@extend %display-flex;
-		@include flex-property(flex-flow, row wrap);
-		@include flex-property(justify-content, space-between);
-		clear: both;
-		list-style: none;
-		margin: 10px 0;
-		padding: 0;
-		@include breakpoint($small) {
-			@include flex-property(flex-flow, row nowrap);
-			margin: 0;
-		}
-		li {
-			margin-bottom: .25em;
-			@include breakpoint($tiny) {
-				width: 49%;
-			}
-			@include breakpoint($small) {
-				margin: 0;
-				width: auto;
-			}
-		}
-	}
-	ul a {
-		background: $plum;
-		color: #fff;
-		padding: .75em 0 .75em 3.5em;
-		@include transition(padding-left 150ms ease);
-		&:before {
-			background: rgba(255,255,255,1);
-			height: 100%;
-			left: 0;
-			top: 0;
-			width: 0;
-			z-index: 3;
-			@include transition(all 200ms $bounce);
-			@include breakpoint($small) {
-				height: 0;
-				right: 0;
-			}
-		}
-		&:hover, &:focus {
-			background: rgba(0,0,0,.125);
-			padding-left: 4.25em;
-			@include transition(padding-left 200ms cubic-bezier(0.175, 1.75, 0.7, 1.275));
-			&:before {
-				width: 3.75em;
-				z-index: 3;
-				@include breakpoint($small) {
-					height: 2.75em;
-					width: auto;
-				}
-			}
-		}
-		&:after {
-			height: 2.5em;
-			left: 10px;
-			top: .125em;
-			width: 2.5em;
-			z-index: 4;
-			@include transition(all 100ms ease);
-			@include breakpoint($small) {
-				left: .25em;
-			}
-		}
-		@include breakpoint($small) {
-			height: 2.75em;
-			padding: 2.5em .5em 0 .5em;
-			text-align: left;
-			width: 3em;
-			b {
-				border-radius: 0 0 1px 1px;
-				box-sizing: border-box;
-				display: block;
-				left: 0;
-				padding: .75em 1em .5em;
-				position: absolute;
-				visibility: hidden;
-				width: 3em;
-				text-indent: -9999em;
-				top: 0;
-				z-index: 1;
-				@include transition(top 100ms $bounce 100ms, background 0s linear 100ms, text-indent 0s linear 120ms);
-				&:before {
-					background: $plum;
-					content: "";
-					display: block;
-					height: 2.5em;
-					left: 0;
-					position: absolute;
-					top: 0;
-					width: 100%;
-					z-index: 2;
-				}
-			}
-			&:hover, &:focus {
-				padding-left: .5em;
-				b {
-					background: darken($plum, 2%);
-					visibility: visible;
-					width: auto;
-					text-indent: 0;
-					top: 2.5em;
-					&:before {
-						top: -2.25em;
-					}
-				}
-			}
-		}
-	}
 }
 
-nav.home {
-	margin-top: 8%;
-	@include breakpoint($small){
-		margin-top: 5%;
-	}
+$homeDelay: 1000ms;
 
+nav.home {
 	h1 {
+		background: $plum;
+		padding-top: 8%;
+		opacity: 1;
+		position: relative;
 		text-align: center;
+		z-index: 5;
+		@include breakpoint($small){
+			padding-top: 7%;
+		}
 		a {
+			background: image-url("nomsbase.svg") no-repeat center/100% auto;
+			color: transparent;
+			display: block;
 			font-size: 2.75em;
 			letter-spacing: -.05em;
+			margin: 0 auto;
+			opacity: 1;
+			overflow: hidden;
+			transition: opacity $homeDelay ease;
+			width: 80%;
+			@include breakpoint($tiny){
+				font-size: 3.75em;
+			}
 			@include breakpoint($small){
+				background: none;
+				color: #fff;
+				display: inline;
 				font-size: 5em;
+				width: auto;
 			}
 		}
 	}
@@ -320,21 +395,154 @@ nav.home {
 
 	ul {
 		background: $plum;
-	}
+		margin: 10px auto;
+		max-width: 1000px;
+		width: 80%;
 
-	ul a {
-		&:after {
-
+		li {
+			width: 48%;
+			@include breakpoint($tiny) {
+				width: 32%;
+			}
+			@include breakpoint($small) {
+				width: unquote((100/6)+"%");
+			}
 		}
+
+		//animation delays
+		@for $a from 1 through 6 {
+			li:nth-child(#{$a}) {
+				a {
+					-webkit-transition-delay: ($a - 1)*200 + $homeDelay;
+					transition-delay: ($a - 1)*200 + $homeDelay;
+				}
+			}
+		}
+
+		@for $i from 0 through 2 {
+			li:nth-child(#{(2 * $i) + 1}), li:nth-child(#{(2 * $i) + 2}) {
+				a {
+					-webkit-transition-duration: 200ms + ($i * 25ms);
+					transition-duration: 200ms + ($i * 25ms);
+					-webkit-transition-timining-function: cubic-bezier(0.175, 0.6 - (.2 * $i), 0.32, 1.275 - (.05 * $i));
+					transition-timing-function: cubic-bezier(0.175, 0.6 - (.2 * $i), 0.32, 1.275 - (.05 * $i));
+				}
+			}
+		}
+
+		@include breakpoint($tiny) {
+			@for $i from 0 through 1 {
+				li:nth-child(#{(3 * $i) + 1}), li:nth-child(#{(3 * $i) + 2}), li:nth-child(#{(3 * $i) + 3}) {
+					a {
+						-webkit-transition-duration: 200ms + ($i * 25ms);
+						transition-duration: 200ms + ($i * 25ms);
+						-webkit-transition-timining-function: cubic-bezier(0.175, 0.6 - (.2 * $i), 0.32, 1.275 - (.05 * $i));
+						transition-timing-function: cubic-bezier(0.175, 0.6 - (.2 * $i), 0.32, 1.275 - (.05 * $i));
+					}
+				}
+			}
+		}
+
+		@include breakpoint($small) {
+			@for $i from 1 through 6 {
+				li:nth-child(#{$i}) {
+					a {
+						-webkit-transition-duration: 200ms;
+						transition-duration: 200ms;
+						-webkit-transition-timining-function: cubic-bezier(0.175, 0.6, 0.32, 1.275);
+						transition-timing-function: cubic-bezier(0.175, 0.6, 0.32, 1.275);
+					}
+				}
+			}
+		}
+
+		a {
+			padding-top: 100%;
+			top: 0;
+			transition: top 400ms $bounce;
+			width: 100%;
+
+			&:before {
+				height: 0;
+				width: 100%;
+				@include transition(all 200ms cubic-bezier(0.175, 0.6, 0.32, 1.275));
+			}
+
+			&:after {
+				height: 90%;
+				left: 5%;
+				top: 5%;
+				width: 90%;
+			}
+
+			b {
+				@include navLinkDrop;
+				width: 100%;
+				bottom: 0;
+				@include transition(bottom 100ms $bounce 120ms, background 0s linear 120ms, text-indent 0s linear 140ms);
+			}
+
+			&:hover, &:focus {
+				&:before {
+					height: 100%;
+				}
+
+				b {
+					@include navLinkDropHover;
+					bottom: -2.25em;
+				}
+			}
+		}
+
 	}
 
 	form {
+		margin: 2em 0;
+		opacity: 1;
 		padding: 10px;
+		transition: opacity $homeDelay ease $homeDelay + (200ms*6);
 		p {
 			margin: 0 auto;
-			max-width: 16em;
+			width: 85%;
 			@include breakpoint($small) {
 				max-width: 25em;
+			}
+		}
+	}
+
+	//initial animation
+	.js & {
+		&.loading {
+			h1 a{
+				opacity: 0;
+			}
+			@for $i from 0 through 2 {
+				li:nth-child(#{(2 * $i) + 1}), li:nth-child(#{(2 * $i) + 2}) {
+					a {
+						top: -11em - $i * 11em
+					}
+				}
+			}
+			@include breakpoint($tiny) {
+				@for $i from 0 through 1 {
+					li:nth-child(#{(3 * $i) + 1}), li:nth-child(#{(3 * $i) + 2}), li:nth-child(#{(3 * $i) + 3}) {
+						a {
+							top: -11em - $i * 11em
+						}
+					}
+				}
+			}
+			@include breakpoint($small) {
+				@for $i from 1 through 6 {
+					li:nth-child(#{$i}) {
+						a {
+							top: -22em
+						}
+					}
+				}
+			}
+			form {
+				opacity: 0;
 			}
 		}
 	}
