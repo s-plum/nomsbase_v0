@@ -1,0 +1,56 @@
+.recipe-search-list {
+	.query {
+		background: darken($plum, 5%);
+		border-radius: 3px;
+		color: #fff;
+		display: inline-block;
+		padding: .25em .5em;
+	}
+}
+
+.no-results {
+	.no-results-actions {
+		display: flex;
+		flex-flow: row wrap;
+		align-items: flex-start;
+		justify-content: space-between;
+		margin: 2em 0;
+		text-align: center;
+
+		a {
+			background: $plum;
+			border-radius: 2px;
+			box-sizing: border-box;
+			color: #fff;
+			display: block;
+			margin-bottom: 1em;
+			padding: 1em;
+			width: 100%;
+
+			b {
+				//background: rgba(255,255,255,.5);
+				display: block;
+				font-size: 200%;
+				font-weight: 300;
+				line-height: normal;
+				margin-top: 0;
+				transition: all 200ms $bounce;
+			}
+
+			&:hover, :focus {
+				background: darken($plum, 5%);
+				text-decoration: none;
+
+				b {
+					font-size: 225%;
+					margin-top: 5px;
+				}
+			}
+
+			@include breakpoint($tiny) {
+				float: left;
+				width: 49%;
+			}
+		}
+	}
+}

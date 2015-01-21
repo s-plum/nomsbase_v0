@@ -9,20 +9,18 @@
 </head>
 <body data-ng-class="{ home: isHome() }" data-loaded={{loaded}}>
     <a href="#nav" id="skip-to-nav" data-ng-click="toggleMenu($event)" data-ng-class="{ open: menuOpen }">Skip to Navigation</a>
-    <main>
-        <div ng-view></div>
-    </main>
+    <main data-ng-view></main>
     <nav data-ng-class="{ home: isHome(), open: menuOpen, loading: !homeLoaded }" class="loading">
         <div>
             <h1 id="nav-label"><a href="/" data-ng-click="toHome()">nomsbase</a></h1>
             <div class="nav-actions">
-                <ul id="nav" aria-labelledby="nav-label">
-                    <li><a href="/edit/2" class="cake" data-ng-click="toggleMenu()"><b>cake</b></a></li>
-                    <li><a href="/recipes/cookies" class="cookies" data-ng-click="toggleMenu()"><b>cookies</b></a></li>
-                    <li><a href="#" class="brownies" data-ng-click="toggleMenu()"><b>brownies/bars</b></a></li>
-                    <li><a href="#" class="bread" data-ng-click="toggleMenu()"><b>bread</b></a></li>
-                    <li><a href="#" class="candy" data-ng-click="toggleMenu()"><b>candy</b></a></li>
-                    <li><a href="#" class="other" data-ng-click="toggleMenu()"><b>other</b></a></li>
+                <ul id="nav" aria-labelledby="nav-label" data-ng-click="toggleMenu($event)">
+                    <li><a href="/edit/2" class="cake"><b>cake</b></a></li>
+                    <li><a href="/recipes/cookies" class="cookies"><b>cookies</b></a></li>
+                    <li><a href="#" class="brownies"><b>brownies/bars</b></a></li>
+                    <li><a href="#" class="bread"><b>bread</b></a></li>
+                    <li><a href="#" class="candy"><b>candy</b></a></li>
+                    <li><a href="#" class="other"><b>other</b></a></li>
                 </ul>
                 <form data-ng-submit="searchRecipes($event)" novalidate>
                     <p>

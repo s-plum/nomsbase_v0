@@ -1,0 +1,56 @@
+@keyframes spin {
+	from {
+		transform: rotateY(0deg);
+	}
+	to {
+		transform: rotateY(360deg);
+	}
+}
+
+.randomizer {
+	color: $plum;
+	font-size: 3em;
+	margin: 10% auto 0;
+	max-width: 8em;
+	perspective: 1000px;
+	padding-top: 5em;
+	position: relative;
+	text-align: center;
+	width: 100%;
+
+	p {
+		margin: 0;
+	}
+
+	span {
+		animation: spin 2s infinite linear;
+		display: block;
+		left: 50%;
+		margin-left: -2em;
+		position: absolute;
+		top: 0;
+		transform-style: preserve-3d;
+		width: 4em;
+		&:before, &:after {
+			backface-visibility: hidden;
+			box-sizing: border-box;
+			content: "";
+			display: block;
+			height: 4em;
+			left: 0;
+			position: absolute;
+			top: 0;
+			width: 4em;
+		}
+		&:before {
+			background: image-url("nom.svg") no-repeat center/100% auto;
+			transform: rotateY(0deg);
+			z-index: 2;
+		}
+		&:after {
+			background: image-url("plum.svg") no-repeat center/auto 100%;
+			transform: rotateY(180deg);
+		}
+	}
+	
+}

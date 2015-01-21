@@ -1,1 +1,38 @@
-<h1>{{recipe.name}}</h1>
+<div class="recipe-view">
+	<h1>{{recipe.name}}</h1>
+	<section class="image" data-ng-if="recipe.image != null">
+		<img src="" alt="{{recipe.name}}"/>
+	</section>
+	<section class="ingredients" data-ng-if="recipe.ingredientGroups.length > 0">
+		<h2>Ingredients</h2>
+		<div ng-repeat="group in recipe.ingredientGroups">
+			<h3 ng-if="recipe.ingredientGroups.length > 1">{{group.name}}</h3>
+			<ul>
+				<li data-ng-repeat="ingredient in group.ingredients">
+					<span class="ingredient-amount" data-ng-if="ingredient.amount != null" data-ng-bind-html="fraction(ingredient.amount)"></span><span class="ingredient-unit" data-ng-if="ingredient.unit != null">{{ingredient.unit}}</span><span class="ingredient-type" data-ng-if="ingredient.type != null">{{ingredient.type}}</span>
+				</li>
+			</ul>
+		</div>
+	</section>
+
+	<section class="instructions" data-ng-if="recipe.instructions != null">
+		<h2>Instructions</h2>
+		<p>{{recipe.instructions}}</p>
+
+		<p class="temperature" data-ng-if="recipe.bakingTemp != null">{{recipe.bakingTemp}}</p>
+
+		<div data-ng-if="recipe.notes != null" class="notes">
+			<h3>Notes:</h3>
+			<p>{{recipe.notes}}</p>
+		</div>
+	</section>
+
+	<section class="tags" ng-if="recipe.tags.length > 0">
+		<h2>Tags</h2>
+		<ul>
+			<li data-ng-repeat="tag in recipe.tags">
+				<a href="/recipes/{{tag}}" class="button">{{tag}}</a>
+			</li>
+		</ul>
+	</section>
+</div>

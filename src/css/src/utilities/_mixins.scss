@@ -19,12 +19,6 @@ mixins
 	background-color: $fallback;
 }
 
-@mixin flex-property($property, $value) {
-	-ms-#{$property}: $value;
-	-webkit-#{$property}: $value;
-	#{$property}: $value;
-}
-
 //keyframes animation builder -> adds -webkit prefix
 @mixin keyframes ($animation_name) {
 	@-webkit-keyframes $animation_name {
@@ -52,13 +46,6 @@ mixins
 /* =================================================================
 extends
 ================================================================= */
-//automatically add prefixing for box-sizing
-//@extend %borderbox
-%borderbox { 
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
 //make element invisible on screen but still visible to screen readers
 //@extend %wai
 %wai {
@@ -68,12 +55,5 @@ extends
 	text-indent: -9999em;
 	-webkit-appearance: none;
 	z-index: -1;
-}
-
-//flexbox prefix helpers
-%display-flex {
-	display: -ms-flexbox;
-	display: -webkit-flex;
-	display: flex;
 }
 

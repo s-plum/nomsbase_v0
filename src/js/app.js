@@ -3,6 +3,10 @@ var menuBreak = window.matchMedia('(min-width: 650px)');
 var nomsbase = angular.module('nomsbase',['ngRoute'])
 	.config(function($routeProvider, $locationProvider) {
 		$routeProvider.when('/', {});
+		$routeProvider.when('/recipe/:id', {
+			templateUrl: '/templates/view.html',
+			controller: 'View'
+		});
 		$routeProvider.when('/recipe/:id/:name', {
 			templateUrl: '/templates/view.html',
 			controller: 'View'
@@ -15,12 +19,17 @@ var nomsbase = angular.module('nomsbase',['ngRoute'])
 			templateUrl: '/templates/edit.html',
 			controller: 'New'
 		});
-		$routeProvider.when('/edit/:id', {
+		$routeProvider.when('/edit/:id/:name', {
 			templateUrl: '/templates/edit.html',
 			controller: 'Edit'
 		});
+		$routeProvider.when('/random', {
+			templateUrl: '/templates/random.html',
+			controller: 'Random'
+		});
 		$routeProvider.when('/404', {
-			templateUrl: '/templates/404.html'
+			templateUrl: '/templates/404.html',
+			controller: 'Error'
 		});
 		$routeProvider.otherwise({
 			redirectTo: '/404'
@@ -31,7 +40,7 @@ var nomsbase = angular.module('nomsbase',['ngRoute'])
 		});
 	});
 
-nomsbase.factory('Page',function() {
+nomsbase.factory('Page', function() {
 	var title = 'nomsbase';
 	return {
 		title: function() { return title; },
@@ -41,6 +50,7 @@ nomsbase.factory('Page',function() {
 
 nomsbase.controller('MainCtrl', function($scope, $location, Page) {
 	$scope.Page = Page;
+	$scope.urlRegex = /\s/g;
 	$scope.searchTerm = '';
 
 	$scope.searchRecipes = function(e) {
@@ -62,7 +72,13 @@ nomsbase.controller('MainCtrl', function($scope, $location, Page) {
 	};
 
 	$scope.toggleMenu = function(e) {
-		if (e) { e.preventDefault(); }
+		//specific case for nav menu toggle button on small screens
+		if (e.target.getAttribute('href') === '#nav') {
+			e.preventDefault();
+		}
+		else {
+			e.target.blur();
+		}
 		if (!menuBreak.matches) {
 			$scope.menuOpen = !$scope.menuOpen;
 		}
@@ -159,7 +175,7 @@ nomsbase.controller('Edit', function($scope, $http, $routeParams) {
 	};
 });
 
-nomsbase.controller('View', function($scope, $http, $routeParams, Page) {
+nomsbase.controller('View', function($scope, $http, $routeParams, $sce, Page) {
 	$scope.recipe = {};
 	var id = $routeParams.id;
 	$http({method:'GET', url: '/get/'+id})
@@ -180,12 +196,54 @@ nomsbase.controller('View', function($scope, $http, $routeParams, Page) {
 		.error(function() {
 			console.log('error');
 		});
+	$scope.fraction = function(num) {
+		var fract = num % 1;
+		if (fract === 0) {
+			return $sce.trustAsHtml(num + '');
+		}
+		else {
+			var whole = num - fract;
+			if (whole === 0) {
+				whole = '';
+			}
+			var fractDisplay = fract;
+			switch (parseFloat(fract.toFixed(3))) {
+				case (0.125):
+					fractDisplay = "<b>&frac18;</b>"
+					break;
+				case (0.250):
+					fractDisplay = "<b>&frac14;</b>"
+					break;
+				case (0.333):
+					fractDisplay = "<b>&frac13;</b>"
+					break;
+				case (0.375):
+					fractDisplay = "<b>&frac38;</b>"
+					break;
+				case (0.500):
+					fractDisplay = "<b>&frac12;</b>"
+					break;
+				case (0.625):
+					fractDisplay = "<b>&frac58;</b>"
+					break;
+				case (0.667):
+					fractDisplay = "<b>&frac23;</b>"
+					break;
+				case (0.875):
+					fractDisplay = "<b>&frac78;</b>"
+					break;
+				default: 
+					break;
+			} 
+			return $sce.trustAsHtml(whole + fractDisplay);
+		}
+	}
 });
 
 nomsbase.controller('Search', function($scope, $http, $location, $routeParams, Page) {
 	$scope.resultsLoaded = false;
 	var id = $routeParams.id.split('-').join(' ');
-	Page.setTitle(id + ' recipes');
+	Page.setTitle('nomsbase query: ' + id);
 	$scope.searchTerm = id;
 	$scope.recipes = [];
 	$http({method:'GET', url: '/search/'+id})
@@ -196,6 +254,20 @@ nomsbase.controller('Search', function($scope, $http, $location, $routeParams, P
 		.error(function() {
 			$scope.resultsLoaded = true;
 		});
+});
+
+nomsbase.controller('Random', function($scope, $http, $location, $timeout, Page) {
+	Page.setTitle('Randomizing...');
+	$http({method:'GET', url: '/getrandom'})
+		.success(function(data, status, headers, config) {	
+			$timeout(function() {
+				$location.path('/recipe/' + data.recipeid);
+			}, 1500);
+		});
+});
+
+nomsbase.controller('Error', function($scope, Page) {
+	Page.setTitle('Oh noes!');
 });
 
 nomsbase.directive('ngEnter', function () {

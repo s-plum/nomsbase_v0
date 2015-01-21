@@ -37,12 +37,14 @@ app.get('/new', routes.index);
 app.get('/recipes', routes.index);
 app.get('/recipes/:query', routes.index);
 app.get('/edit/:id/:name', routes.index);
+app.get('/random', routes.index);
 
 //data get/set
 app.post('/add', api.add(db));
 app.post('/update/:id', api.update(db));
 app.get('/get/:id', api.get(db));
 app.get('/search/:query', api.search(db));
+app.get('/getrandom', api.getRandom(db));
 
 app.use(function(req, res, next){
     res.status(404).sendfile(path.resolve(__dirname + '/dist/index.html'));

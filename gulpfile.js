@@ -11,6 +11,7 @@ var gulp = require('gulp'),
   streamify = require('gulp-streamify'),
   plumber = require('gulp-plumber'),
   del = require('del'),
+  autoprefixer = require('gulp-autoprefixer')
   onError = function (err) {  
     console.log(err.toString());
   },
@@ -86,7 +87,6 @@ gulp.task('scripts', function() {
 
 gulp.task('sassy', function() {
   gulp.src(srcPaths.sass)
-    //.pipe(watch(srcPaths.sass))
     .pipe(plumber({
       errorHandler: onError
     }))
@@ -96,6 +96,10 @@ gulp.task('sassy', function() {
       sass: srcPath + '/css/src'
     }))
     .pipe(rename('main.css'))
+    .pipe(autoprefixer({
+        browsers: ['last 2 versions'],
+        cascade: false
+    }))
     .pipe(gulp.dest(distPath + '/css'))
     .pipe(livereload());
 });

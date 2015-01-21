@@ -1,0 +1,80 @@
+{
+	"name": "Cinnamon Streusel Cookies",
+	"recipeid": 0,
+	"bakingTemp": 400,
+	"ingredientGroups": [
+		{
+			"name": "For the cookie:",
+			"ingredients": [
+				{
+					"amount": 1,
+					"unit": "cup",
+					"type": "flour"
+				},
+				{
+					"amount": 0.125,
+					"unit": "tsp.",
+					"type": "salt"
+				},
+				{
+					"amount": 0.667,
+					"unit": "cup",
+					"type": "butter, cut up (cold)"
+				},
+				{
+					"amount": 0.667,
+					"unit": "cup",
+					"type": "ricotta cheese"
+				},
+				{
+					"amount": 1,
+					"unit": "T.",
+					"type": "sugar"
+				},
+				{
+					"amount": 1.5,
+					"unit": "tsp.",
+					"type": "vanilla extract"
+				}
+			]
+		},
+		{
+			"name": "For the streusel:",
+			"ingredients": [
+				{
+					"amount": 0.667,
+					"unit": "cup",
+					"type": "flour"
+				},
+				{
+					"amount": 1,
+					"unit": "tsp.",
+					"type": "finely ground almonds"
+				},
+				{
+					"amount": 0.25,
+					"unit": "tsp.",
+					"type": "ground cinnamon"
+				},
+				{
+					"amount": 0.333,
+					"unit": "cup",
+					"type": "butter, cut up (cold)"
+				},
+				{
+					"amount": 0.333,
+					"unit": "cup",
+					"type": "strawberry preserves"
+				},
+				{
+					"amount": null,
+					"unit": null,
+					"type": "Confectioners' sugar, for dusting"
+				}
+			]
+		}
+	],
+	"instructions": "Sift flour and salt into a medium bowl. Use a pastry blender to cut in the butter until the mixture resembles coarse crumbs. Stir in the ricotta, sugar, and vanilla to form a stiff dough. Press the dough into a disk, wrap in plastic wrap, and refrigerate for 30 minutes.\nPreheat the oven. Line two cookie sheets with parchment. Mix the flour, almonds, and cinnamon in a small bowl. Use a pastry blender to cut in the butter until the crumble resembles coarse crumbs.\nRoll out the dough on a lightly floured surface to a thickness of ¼ inch. Use a 2½ inch cookie cutter to cut out cookies. Gather the dough scraps, re-roll, and continue cutting out cookies until all the dough is used. Use a spatula to transfer the cookies to the prepared cookie sheets, placing them 1 inch apart. Warm the preserves in a small saucepan over low heat until liquid. Spread the preserves over the tops of the cookies and sprinkle with the streusel.\nBake for 12 to 15 minutes, or until the tops are golden and the edges are beginning to brown, rotating the sheets halfway through for even baking. Transfer to racks to cool. Dust with the confectioners’ sugar just before serving.",
+	"notes": "Store in an airtight container for 3 to 4 days.",
+	"tags": ["cookies","strawberry"]
+}

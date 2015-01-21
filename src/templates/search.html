@@ -1,10 +1,14 @@
-<div data-ng-if="recipes.length > 0">
-	<h1>nomsbase query: '{{searchTerm}}'</h1> 
-	<ul data-ng-repeat="recipe in recipes">
-		<li><a href="/recipe/{{recipe.recipeid}}/{{ recipe.name.toLowerCase().replace(' ', '-') }}">{{recipe.name}}</a></li>
+<div class="recipe-search-list">
+	<h1>nomsbase query: <span class="query">{{searchTerm}}</span></h1> 
+	<ul data-ng-if="recipes.length > 0" data-ng-repeat="recipe in recipes">
+		<li><a href="/recipe/{{recipe.recipeid}}/{{ recipe.name.toLowerCase().replace(urlRegex, '-') }}">{{recipe.name}}</a></li>
 	</ul>
-</div>
-<div data-ng-if="recipes.length === 0 && resultsLoaded">
-	<h1>No results found</h1>
-	<p>You're doomed.</p>
+
+	<div data-ng-if="recipes.length === 0 && resultsLoaded" class="no-results">
+		<p>Hmm... I don't think I've got any recipes for that.</p>
+		<div class="no-results-actions">
+			<a href="//google.com/search?q={{searchTerm}}" target="_blank">Want to find a new one? <b>Google it.</b></a>
+			<a href="/random">No time for Google? <b>Randomize!</b></a>
+		</div>
+	</div>
 </div>
