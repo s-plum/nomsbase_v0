@@ -1,7 +1,7 @@
-@import "compass/support", "utilities/normalize", "utilities/fonts", "utilities/functions", "utilities/mixins", "utilities/variables", "partials/nav", "partials/forms", "partials/view", "partials/search", "partials/random";
+@import "compass/support", "utilities/normalize", "utilities/fonts", "utilities/functions", "utilities/variables", "utilities/mixins", "partials/nav", "partials/edit", "partials/view", "partials/search", "partials/random";
 
 body {
-	background: #f5f5f5;
+	background: $bg;
 	color: #222;
 	font: 300 1rem/125% 'Roboto Condensed', Arial, Helvetica, sans-serif;
 	margin: 0;
@@ -25,7 +25,16 @@ h1 {
 	line-height: 1em;
 }
 
-h2, h3 {
+h2 {
+	border-bottom: 1px solid $plum;
+	color: $plum;
+	font-size: 1.25em;
+	font-weight: 400;
+	margin: 0 0 .5em;
+	padding-bottom: .25em;
+}
+
+h3 {
 	font: 300 1.75rem 'Roboto Condensed', Arial, sans-serif;
 }
 
@@ -51,19 +60,18 @@ main {
 
 .button {
 	background: $plum;
+	border: 0;
 	border-radius: 2px;
 	color: #fff;
 	display: inline-block;
-	line-height: 1.333rem;
 	padding: .25em 1em;
+	position: relative;
 	text-align: center;
 	text-decoration: none;
 	transition: all 100ms ease;
 	&:hover, &:focus {
 		background: darken($plum, 5%);
-		font-size: 1.05em;
-		line-height: 1.333rem;
-		padding: .2375em .875em;
+		outline: 0;
 		text-decoration: none;
 	}
 }

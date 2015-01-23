@@ -8,38 +8,22 @@ mixins
 	}
 }
 
-@mixin filter($params...) {
-	-webkit-filter: $params;
-	filter: $params;
-}
-
-//linear gradient background with solid color fallback support for older browsers
-@mixin linear-gradient($fallback, $direction, $colorstops...) {
-	background: linear-gradient($direction, $colorstops...);
-	background-color: $fallback;
-}
-
-//keyframes animation builder -> adds -webkit prefix
-@mixin keyframes ($animation_name) {
-	@-webkit-keyframes $animation_name {
-		@content;
+@mixin placeholder {
+	&::-webkit-input-placeholder {
+	   @content;
 	}
-	@keyframes $animation_name {
-		@content;
+
+	&:-moz-placeholder {
+	   @content; 
 	}
-}
 
-//animation property builder -> adds -webkit prefix
-@mixin animation($params) {
-	animation: $params;
-    -webkit-animation: $params;
-}
+	&::-moz-placeholder {
+	   @content;  
+	}
 
-//responsive sprite background images
-@mixin squishy-sprite($sprite, $index) {
-	background-position: (100% / (length(sprite-names($sprite)) - 1))*($index - 1) 0;
-	background-size: auto 100%;
-	-webkit-backface-visibility: hidden;
+	&:-ms-input-placeholder {  
+	   @content;  
+	}
 }
 
 
@@ -55,5 +39,97 @@ extends
 	text-indent: -9999em;
 	-webkit-appearance: none;
 	z-index: -1;
+}
+
+//recipe view/edit controls
+%recipe-tags {
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	li {
+		display: inline-block;
+		margin: 0 5px .25em 0;
+		&:last-child {
+			margin: 0;
+		}
+	}
+}
+
+%group-item {
+	background: none;
+	border: 2px solid $plum;
+	border-radius: 4px;
+	box-shadow: -1px 1px 0 0 $bg, -2px 2px 0 0 $plum, -3px 3px 0 0 $plum;
+	box-sizing: border-box;
+	height: 1.5em;
+	position: absolute;
+	width: 1.5em;
+}
+
+%add-item {
+	background: $plum;
+	border-radius: 1px;
+	box-sizing: border-box;
+	color: #fff;
+	border: 0;
+	display: block;
+	line-height: 1.75em;
+	max-width: 2em;
+	overflow: hidden;
+	position: relative;
+	text-align: left;
+	transition: none;
+	white-space: pre;
+
+	&:before, &:after {
+		backface-visibility: hidden;
+		bottom: 0;
+		content: "";
+		display: block;
+		position: absolute;
+		transform: translateZ(0);
+		top: -.125em;
+	}
+
+	&:before {
+		z-index: 2;
+	}
+
+	&:after {
+		background: $bg;
+		width: 2em;
+		z-index: 1;
+	}
+
+	&:hover, &:focus {
+		max-width: 10.5em;
+		outline: 0;
+		transition: all 150ms cubic-bezier(0.175, 0.7, 0.5, 1.15);
+	}
+}
+
+%temperature {
+	border: 1px solid $plum;
+	border-radius: 2px;
+	display: inline-block;
+	position: relative;
+
+	&:before {
+		background: $plum inline-image("temperature.png") no-repeat center;
+		bottom: 0;
+		content: "";
+		display: block;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 1.75em;
+		backface-visibility: hidden;
+	}
+
+	&:after {
+		content: "\00b0\00a0 F";
+	}
 }
 

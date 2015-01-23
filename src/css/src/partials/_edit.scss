@@ -1,0 +1,361 @@
+.recipe-edit {
+	margin-bottom: 2em;
+	overflow: hidden;
+
+	.hidden {
+		@extend %wai;
+		border: 0;
+		height: 0;
+		width: 0;
+	}
+
+	p {
+		margin: 0 0 1em;
+	}
+
+	input, textarea {
+		background: #fdfdfd;
+		box-sizing: border-box;
+		border: 1px solid #eee;
+		border-radius: 2px;
+		font-weight: 300;
+		&:focus {
+			background: #fff;
+			border-color: rgba($plum, .75);
+			outline: 0;
+			@include placeholder {
+				color: rgba($plum, .025);
+			}
+		}
+		@include placeholder {
+			font-weight: 300;
+		}
+	}
+
+	input {
+		padding: 3px;
+	}
+
+	textarea {
+		padding: .5em;
+		width: 100%;
+	}
+
+	fieldset {
+		border: 0;
+		margin: 0 0 2em;
+		padding: 0;
+
+		fieldset {
+			margin: 0;
+		}
+	}
+
+	legend {
+		@extend h2;
+		display: block;
+		padding: 0 0 .25em;
+		width: 100%;
+	}
+
+	textarea {
+		resize: vertical;
+	}
+
+	#recipe-name {
+		@extend h1;
+		margin: .6em 0;
+		width: 100%;
+		@include placeholder {
+			font-weight: 400;
+			line-height: 1.25em;
+		}
+	}
+
+	.ingredient-group-name {
+		margin: 0 0 .5em;
+		padding-right: 2.125em;
+		input {
+			width: 100%;
+		}
+	}
+
+	.ingredient-groups {
+		position: relative;
+		> div {
+			display: flex;
+			flex-flow: row wrap;
+			justify-content: space-between;
+		}
+	}
+
+	.ingredient-group {
+		box-sizing: border-box;
+		margin-bottom: 1em;
+		position: relative;
+		width: 100%;
+		@include breakpoint(900px) {
+			width: 50%;
+			&:nth-child(odd) {
+				padding-right: 2em;
+
+				.remove-group {
+					right: 2em;
+				}
+			}
+			&:nth-child(even) {
+				padding-left: 2em;
+			}
+		}
+
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+
+			fieldset > div {
+				display: flex;
+				flex-flow: row nowrap;
+			}
+
+			li {
+				margin-bottom: .5em;
+				padding-right: 1em;
+			}
+
+			input {
+				margin-right: 5px;
+				width: 10px;
+				&[data-ng-model="ingredient.amount"] {
+					flex: 0 0 auto;
+					width: 2.75em;
+				}
+				&[data-ng-model="ingredient.unit"] {
+					flex: 1 1 auto;
+				}
+				&[data-ng-model="ingredient.type"] {
+					flex: 2 1 auto;
+				}
+			}
+		}
+	}
+
+	.add-ingredient {
+		@extend %add-item;
+		padding: 3px 1em 3px 0;
+
+		&:before, &:after {
+			left: 0;
+		}
+
+		&:before {
+			background: $bg inline-image("add.svg") no-repeat center/53% auto;
+			transition: all 50ms ease;
+			width: 1.75em;
+		}
+
+		&:hover, &:focus {
+			padding-left: 2.875em;
+
+			&:before {
+				background-size: 65% auto;
+				transition: all 75ms ease-out;
+			}
+		}
+	}
+
+	.add-ingredient-group {
+		@extend %add-item;
+		padding: 3px 0 3px 1em;
+		position: absolute;
+		right: -4px;
+		top: -.5em;
+
+		&:before {
+			@extend %group-item;
+			content: "";
+			display: block;
+			right: 4px;
+			top: 4px;
+		}
+
+		&:after {
+			background: $bg inline-image("add.svg") no-repeat center/34% auto;
+			border-left: 3px solid $bg;
+			bottom: 1px;
+			right: 0;
+			transition: background-size 50ms ease;
+		}
+
+		&:hover, &:focus {
+			padding-right: 3.125em;
+
+			&:after {
+				background-size: 45% auto;
+				transition: background-size 200ms $bounce;
+			}
+		}
+	}
+
+	%remove-item {
+		backface-visibility: hidden;
+		opacity: .15;
+		transition: all 50ms ease;
+		&:hover, &:focus {
+			opacity: 1;
+			outline: 0;
+			transition: background-size 200ms $bounce, opacity 200ms ease;
+		}
+	}
+
+	.remove-ingredient {
+		@extend %remove-item;
+		background: inline-image("close.svg") no-repeat center/30% auto;
+		border: 0;
+		height: 1.875rem;
+		padding: 0;
+		position: relative;
+		text-indent: -9999em;
+		width: 1.875rem;
+
+		&:hover, &:focus {
+			background-size: 50% auto;
+			opacity: 1;
+			outline: 0;
+		}
+	}
+
+	.remove-group {
+		@extend %remove-item;
+		@extend %group-item;
+		right: 0;
+		text-indent: -9999em;
+		top: 0;
+
+		&:before {
+			backface-visibility: hidden;
+			background: inline-image("close.svg") no-repeat center/40% auto;
+			content: "";
+			display: block;
+			height: 20px;
+			left: 0;
+			position: absolute;
+			width: 20px;
+			top: 0;
+			transition: background-size 50ms ease;
+		}
+
+		&:hover, &:focus {
+			&:before {
+				background-size: 60% auto;
+				transition: background-size 200ms $bounce;
+			}
+		}
+	}
+
+	#recipe-instructions {
+		min-height: 200px;
+	}
+
+	.temperature {
+		@extend %temperature;
+		font-weight: 400;
+		padding: 0 0 0 1.75em;
+
+		&:after {
+			position: absolute;
+			right: .5em;
+			top: .3em;
+		}
+
+		input {
+			font-weight: 400;
+			padding: .25em 1.5em .25em .5em;
+			width: 4.75em;
+
+			&:focus {
+				border-radius: 0;
+			}
+		}
+	}
+
+	.notes {
+		label {
+			font-style: italic;
+		}
+		textarea {
+			font-style: italic;
+		}
+	}
+
+	.tags {
+		@extend %recipe-tags;
+
+		ul {
+			background: #fdfdfd;
+			box-sizing: border-box;
+			border: 1px solid #eee;
+			border-radius: 2px;
+			padding: .5em .5em .25em;
+		}
+
+		li a {
+			padding-right: 2em;
+			&:after {
+				background: inline-image("close-white.svg") no-repeat center/40% auto;
+				bottom: 0;
+				content: "";
+				display: block;
+				opacity: .4;
+				right: 3px;
+				position: absolute;
+				transition: background-size 50ms ease, opacity 100ms ease;
+				top: 0;
+				width: 1.5rem;
+			}
+
+			&:hover, &:focus {
+				&:after {
+					background-size: 50% auto;
+					opacity: 1;
+				}
+			}
+		}
+
+		input {
+			border: 0;
+			color: $plum;
+			@include placeholder {
+				color: $plum;
+			}
+		}
+	}
+
+	.save {
+		float: right;
+		font-size: 1.5em;
+		font-weight: 300;
+		padding: .25em .75em;
+
+		&:after {
+			background: inline-image("save.svg") no-repeat center/100% auto;
+			content: "";
+			display: inline-block;
+			float: left;
+			height: 1em;
+			margin-right: 10px;
+			position: relative;
+			top: 2px;
+			width: 1em;
+		}
+
+		&[disabled="disabled"], .ng-pristine & {
+			opacity: .125;
+		}
+	}
+}
+
+
+
+
+

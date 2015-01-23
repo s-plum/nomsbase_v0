@@ -1,5 +1,7 @@
 var menuBreak = window.matchMedia('(min-width: 650px)');
 
+var config = require('./config');
+
 var nomsbase = angular.module('nomsbase',['ngRoute'])
 	.config(function($routeProvider, $locationProvider) {
 		$routeProvider.when('/', {});
@@ -15,14 +17,19 @@ var nomsbase = angular.module('nomsbase',['ngRoute'])
 			controller: 'Search',
 			templateUrl: '/templates/search.html'
 		});
-		$routeProvider.when('/new', {
-			templateUrl: '/templates/edit.html',
-			controller: 'New'
-		});
-		$routeProvider.when('/edit/:id/:name', {
-			templateUrl: '/templates/edit.html',
-			controller: 'Edit'
-		});
+
+		//new and edit only available in dev
+		if (config.environment === 'dev') {
+			$routeProvider.when('/new', {
+				templateUrl: '/templates/edit.html',
+				controller: 'New'
+			});
+			$routeProvider.when('/edit/:id/:name', {
+				templateUrl: '/templates/edit.html',
+				controller: 'Edit'
+			});
+		}
+		
 		$routeProvider.when('/random', {
 			templateUrl: '/templates/random.html',
 			controller: 'Random'
@@ -46,6 +53,104 @@ nomsbase.factory('Page', function() {
 		title: function() { return title; },
 		setTitle: function(newTitle) { title = newTitle }
 	}
+});
+
+nomsbase.factory('RecipeEditor', function($http) {
+	//constructor for adding ingredients
+	var Ingredient = function() {
+		return {
+			amount: null,
+			unit: null,
+			type: null
+		}
+	};
+
+	//constructor for ingredient groups
+	var IngredientGroup = function() {
+		return {
+			name: null,
+			ingredients: []
+		}
+	}
+
+	var removeItem = function(item, arr) {
+		var index = arr.indexOf(item);
+		if (index > -1) {
+			arr.splice(index, 1);
+			return true;
+		}
+		return false;
+	}
+
+	return {
+		addIngredient: function(group) {
+			if (group && group.ingredients) {
+				group.ingredients.push(new Ingredient());
+			}
+		},
+
+		addIngredientGroup: function(recipe) {
+			var group = new IngredientGroup();
+			group.ingredients.push(new Ingredient());
+			recipe.ingredientGroups.push(group);
+		},
+
+		removeIngredient: function(ingredient, group, recipe) {
+			if (group && group.ingredients && ingredient) {
+				if (removeItem(ingredient, group.ingredients)) {
+					if (group.ingredients.length === 0 && recipe && recipe.ingredientGroups.length === 1) {
+						recipe.ingredientGroups = [];
+					}
+				}
+			}		
+		},
+
+		removeIngredientGroup: function(group, recipe) {
+			if (group) {
+				var index = recipe.ingredientGroups.indexOf(group);
+				if (index > -1) {
+					recipe.ingredientGroups.splice(index, 1);
+				}
+			}
+		},
+
+		addTag: function(recipe) {
+			var tag = recipe.newtag;
+			var list = recipe.tags;
+			if (tag && tag.trim().length > 0 && list.indexOf(tag.trim()) === -1) {
+				list.push(tag.trim());
+			}
+			recipe.newtag = '';
+			var input = document.querySelectorAll('[data-ng-model="recipe.newtag"]')[0];
+			if (input) {
+				//input.value = '';
+				input.focus();
+			}
+		},
+
+		removeTag: function(tag, list) {
+			if (tag && list) {
+				removeItem(tag, list);
+			}
+		},
+
+		save: function(data) {
+			var url = '/add';
+			if (data._id != null) {
+				url = '/update/' + data._id;
+			}
+			$http({
+				url : url,
+				data : data,
+				method : 'POST',
+				contentType: 'application/json; charset=utf-8',
+				dataType: 'json'
+			})
+			.success(function(data) {
+				console.log(data);
+			});
+		}
+	};
 });
 
 nomsbase.controller('MainCtrl', function($scope, $location, Page) {
@@ -108,134 +213,71 @@ nomsbase.controller('MainCtrl', function($scope, $location, Page) {
 });
 
 
-nomsbase.controller('New', function ($scope, $http) {
-	$scope.recipe = {};
-	$scope.recipe.ingredients = [];
-	$scope.recipe.tags = [];
-	$scope.addIngredient = function() {
-		$scope.recipe.ingredients.push({
-			name: '',
-			amount: 0,
-			unit: ''
-		});
+nomsbase.controller('New', function ($scope, $http, Page, RecipeEditor) {
+	Page.setTitle('nomsbase insert');
+	$scope.RecipeEditor = RecipeEditor;
+	$scope.saveUrl = '/add';
+	var recipe = {
+		name: '',
+		ingredientGroups: [],
+		instructions: null,
+		bakingTemp: null,
+		tags: []
 	};
-	$scope.addTag = function() {
-		if ($scope.recipe.newtag && $scope.recipe.newtag.trim().length > 0) {
-			$scope.recipe.tags.push($scope.recipe.newtag);
-			$scope.recipe.newtag = '';
-		}
-	};
-	$scope.removeItem = function(id, array) {
-		$scope.recipe[array].splice(id, 1);
-	};
-	$scope.save = function() {
-		$http({
-			url : '/add',
-			data : $scope.recipe,
-			method : 'POST',
-			contentType: 'application/json; charset=utf-8',
-			dataType: 'json'
-		});
-	};
+	RecipeEditor.addIngredientGroup(recipe);
+	$scope.recipe = recipe;
 });
 
-nomsbase.controller('Edit', function($scope, $http, $routeParams) {
+nomsbase.controller('Edit', function($scope, $http, $routeParams, $location, Page, RecipeEditor) {
 	$scope.recipe = {};
+	$scope.RecipeEditor = RecipeEditor;
 	var id = $routeParams.id.split('-').join(' ');
 	//get original recipe data
-	$http({method:'GET', url: '/get/'+id + '?' + new Date().getTime()}).
-		success(function(data, status, headers, config) {
+	$http({method:'GET', url: '/get/'+id + '?' + new Date().getTime()})
+		.success(function(data, status, headers, config) {
 			$scope.recipe = data;
+			Page.setTitle('nomsbase update: ' + data.name);
+			$location.path('/edit/' + data.recipeid + '/' + data.name.toLowerCase().replace(/\s/g, '-'));
 		});
-	$scope.addIngredient = function() {
-		$scope.recipe.ingredients.push({
-			name: '',
-			amount: 0,
-			unit: ''
-		});
-	};
-	$scope.addTag = function() {
-		if ($scope.recipe.newtag && $scope.recipe.newtag.trim().length > 0) {
-			$scope.recipe.tags.push($scope.recipe.newtag);
-			$scope.recipe.newtag = '';
-		}
-	};
-	$scope.removeItem = function(id, array) {
-		$scope.recipe[array].splice(id, 1);
-	};
-	$scope.save = function() {
-		console.log($scope.data);
-		$http({
-			url : '/update/'+id,
-			data : $scope.recipe,
-			method : 'POST',
-			contentType: 'application/json; charset=utf-8',
-			dataType: 'json'
-		});
-	};
 });
 
-nomsbase.controller('View', function($scope, $http, $routeParams, $sce, Page) {
-	$scope.recipe = {};
+nomsbase.controller('View', function($scope, $http, $routeParams, $sce, $location, Page) {
+	$scope.recipe = {
+		name: ''
+	};
 	var id = $routeParams.id;
 	$http({method:'GET', url: '/get/'+id})
 		.success(function(data, status, headers, config) {
 			if (!data.error) {
 				Page.setTitle(data.name);
+				$location.path('/recipe/' + data.recipeid + '/' + data.name.toLowerCase().replace(/\s/g, '-'));
 				$scope.recipe = data;
 			}
 			else {
-				$http({method:'GET', url: '/partials/no-results'})
-					.success(function(data, status, headers, config) {
-						if (typeof data === 'string') {
-							document.getElementsByTagName('main')[0].innerHTML = data;
-						}
-					});
+				$location.path('/404');
 			}
 		})
 		.error(function() {
 			console.log('error');
 		});
 	$scope.fraction = function(num) {
-		var fract = num % 1;
-		if (fract === 0) {
-			return $sce.trustAsHtml(num + '');
+		//convert to string, just in case
+		num += '';
+		var frac = new RegExp('([0-9]+\/[0-9]+)', 'g');
+		if (!frac.test(num)) {
+			return $sce.trustAsHtml(num);
 		}
 		else {
-			var whole = num - fract;
-			if (whole === 0) {
-				whole = '';
+			var glyphs = ['&frac18;', '&frac14;', '&frac13;', '&frac38;', '&frac12;', '&frac58;', '&frac23;', '&frac78;'];
+			var fracString = num.match(frac)[0];
+			var fracDisplay = '&frac' + fracString.replace('/', '') + ';';
+
+			//glyph does not exist, just return original
+			if (glyphs.indexOf(fracDisplay) === -1) {
+				return $sce.trustAsHtml(num);
 			}
-			var fractDisplay = fract;
-			switch (parseFloat(fract.toFixed(3))) {
-				case (0.125):
-					fractDisplay = "<b>&frac18;</b>"
-					break;
-				case (0.250):
-					fractDisplay = "<b>&frac14;</b>"
-					break;
-				case (0.333):
-					fractDisplay = "<b>&frac13;</b>"
-					break;
-				case (0.375):
-					fractDisplay = "<b>&frac38;</b>"
-					break;
-				case (0.500):
-					fractDisplay = "<b>&frac12;</b>"
-					break;
-				case (0.625):
-					fractDisplay = "<b>&frac58;</b>"
-					break;
-				case (0.667):
-					fractDisplay = "<b>&frac23;</b>"
-					break;
-				case (0.875):
-					fractDisplay = "<b>&frac78;</b>"
-					break;
-				default: 
-					break;
-			} 
-			return $sce.trustAsHtml(whole + fractDisplay);
+
+			return $sce.trustAsHtml(fracDisplay);
 		}
 	}
 });

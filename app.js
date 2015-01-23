@@ -6,7 +6,7 @@ var express = require('express'), //templating
 	mongoose = require('mongoose'),
 	api = require('./routes/api'),
 	//ObjectID = require('mongodb').ObjectID,
-	distPath = '/dist'; 
+	distPath = '/dist';
 
 //connect to database	
 mongoose.connect('mongodb://localhost:27017/nomsbase');
@@ -14,6 +14,8 @@ var db = mongoose.connection;
 db.once('connected', function() {
 	console.log("Connected to database");
 });
+
+
 
 var app = express();
 
@@ -25,19 +27,14 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, distPath)));
+
 // development only
-if ('development' == app.get('env')) {
+if ('dev' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
 //for views
 app.get('/', routes.index);
-app.get('/recipe/:id/:name', routes.index);
-app.get('/new', routes.index);
-app.get('/recipes', routes.index);
-app.get('/recipes/:query', routes.index);
-app.get('/edit/:id/:name', routes.index);
-app.get('/random', routes.index);
 
 //data get/set
 app.post('/add', api.add(db));

@@ -1,48 +1,74 @@
-<form name="nomsform" novalidate>
-	<label for="recipe-name">Name:</label>
-	<input type="text" id="recipe-name" data-ng-model="recipe.name" required="required" aria-required="true"/>
-	<fieldset>
+<form name="nomsform" class="recipe-edit" novalidate data-ng-show="recipe.ingredientGroups != null">
+	<label for="recipe-name" class="hidden">Name:</label>
+	<input type="text" id="recipe-name" data-ng-model="recipe.name" required="required" aria-required="true" placeholder="Super Nomtastic {{recipe._id == null ? 'New ' : ''}}Recipe"/>
+	
+	<fieldset class="ingredient-groups">
 		<legend>Ingredients</legend>
-		<ul data-ng-repeat="ingredient in recipe.ingredients">
-			<li>
-				<p>
-					<label for="ingredient-amount-{{$index}}">Amount</label>
-					<input type="text" id="ingredient-name-{{$index}}" data-ng-model="ingredient.amount" data-placeholder="1" data-ng-required="ingredient.unit || ingredient.name"/>
+		<div>
+			<fieldset ng-repeat="group in recipe.ingredientGroups" class="ingredient-group">
+				<legend class="hidden">Ingredient Group</legend>
+				<p data-ng-show="recipe.ingredientGroups.length > 1" class="ingredient-group-name">
+					<label for="ingredient-group-name-{{$index}}" class="hidden">Name</label>
+					<input id="ingredient-group-name-{{$index}}" type="text" data-ng-required="recipe.ingredientGroups.length > 1" data-ng-model="group.name"/>
 				</p>
-				<p>
-					<label for="ingredient-unit-{{$index}}">Unit</label>
-					<input type="text" id="ingredient-unit-{{$index}}" data-ng-model="ingredient.unit" placeholder="cup" data-ng-required="ingredient.amount || ingredient.name"/>
-				</p>
-				<p>
-					<label for="ingredient-name-{{$index}}">Ingredient</label>
-					<input type="text" id="ingredient-name-{{$index}}" data-ng-model="ingredient.name" placeholder="butter" data-ng-required="ingredient.unit || ingredient.amount"/>
-				</p>
-				<button data-ng-click="removeItem($index, 'ingredients')">remove</button>
-			</li>
-		</ul>
-		<button id="add-ingredient" href="#" ng-click="addIngredient()">Add ingredient</button>
+				<ul data-ng-show="group.ingredients.length > 0">
+					<li data-ng-repeat="ingredient in group.ingredients">
+						<fieldset>
+							<legend class="hidden">Ingredient</legend>
+							<div>
+								<label for="ingredient-amount-{{$parent.$index}}-{{$index}}" class="hidden">Amount</label>
+								<input type="text" id="ingredient-amount-{{$parent.$index}}-{{$index}}" data-ng-model="ingredient.amount" placeholder="1"/>
+								
+								<label for="ingredient-unit-{{$parent.$index}}-{{$index}}" class="hidden">Unit</label>
+								<input type="text" id="ingredient-unit-{{$parent.$index}}-{{$index}}" data-ng-model="ingredient.unit" placeholder="cup"/>
+
+								<label for="ingredient-type-{{$parent.$index}}-{{$index}}" class="hidden">Type</label>
+								<input type="text" id="ingredient-type-{{$parent.$index}}-{{$index}}" data-ng-model="ingredient.type" placeholder="butter" data-ng-required="!ingredient.unit && !ingredient.amount"/>
+
+								<button type="button" data-ng-click="RecipeEditor.removeIngredient(ingredient, group, recipe)" class="remove-ingredient" title="Remove">Remove</button>
+							</div>
+						</fieldset>
+					</li>
+				</ul>
+				<button type="button" data-ng-click="RecipeEditor.addIngredient(group)" class="add-ingredient">Add ingredient</button>
+				<button type="button" data-ng-show="recipe.ingredientGroups.length > 1" data-ng-click="RecipeEditor.removeIngredientGroup(group, recipe)" class="remove-group" title="Remove group">Remove group</button>
+			</fieldset>
+		</div>
+
+		<button type="button" data-ng-click="RecipeEditor.addIngredientGroup(recipe)" class="add-ingredient-group">Add group</button>
+
+	</fieldset>
+
+	<fieldset>
+		<legend>Instructions</legend>
+		<p>
+			<label for="recipe-instructions" class="hidden">Instructions</label>
+			<textarea id="recipe-instructions" placeholder="Combine all ingredients. Add more butter." data-ng-model="recipe.instructions" required></textarea>
+		</p>
+		<p class="temperature">
+			<label for="recipe-temp" class="hidden">Baking Temperature (&deg;F)</label>
+			<input type="number" id="recipe-temp" placeholder="350" min="125" max="500" ng-model="recipe.bakingTemp"/>
+		</p>
+		<p class="notes">
+			<label for="recipe-notes">Notes:</label>
+			<textarea id="recipe-notes" placeholder="Do not feed after midnight." ng-model="recipe.notes"></textarea>
+		</p>
 	</fieldset>
 	
-	<label for="recipe-temp">Baking Temperature (&deg;F)</label>
-	<input type="number" id="recipe-temp" placeholder="350" min="125" max="500" ng-model="recipe.bakingTemp"/> 
-	
-	<label for="recipe-instructions">Instructions</label>
-	<textarea id="recipe-instructions" placeholder="Combine all ingredients. Add more butter." data-ng-model="recipe.instructions" required></textarea>
-	
-	<label for="recipe-notes">Notes</label>
-	<textarea id="recipe-notes" placeholder="Do not feed after midnight." ng-model="recipe.notes"></textarea>
-	
-	<fieldset>
+	<fieldset class="tags">
 		<legend>Tags</legend>
-		<ul id="tags" ng-repeat="tag in recipe.tags">
-			<li><a href="#" ng-click="removeItem($index, 'tags')">{{ tag }}</a></li>
+		<ul>
+			<li data-ng-repeat="tag in recipe.tags"><a href="#" ng-click="RecipeEditor.removeTag(tag, recipe.tags)" class="button">{{ tag }}</a></li>
+			<li>
+				<label for="recipe-tag" class="hidden">Add Tag</label>
+				<input type="text" id="recipe-tag" placeholder="type and press enter to add" data-ng-enter="RecipeEditor.addTag(recipe)" data-ng-model="recipe.newtag" aria-label="tags: type and press enter to add"/>
+			</li>
 		</ul>
 		<div>
-			<label for="recipe-tag">Tag</label>
-			<input type="text" id="recipe-tag" placeholder="noms" data-ng-enter="addTag()" data-ng-model="recipe.newtag"/>
-			<button id="add-tag" data-ng-click="addTag()">Add tag</button>
+			
+			
 		</div>
 	</fieldset>
 	
-	<button ng-disabled="nomsform.$invalid" ng-click="save()">Save</button>
+	<button ng-disabled="(nomsform.$invalid || nomsform.$pristine)" ng-click="RecipeEditor.save(recipe)" class="button save">Save</button>
 </form>

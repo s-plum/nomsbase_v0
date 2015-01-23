@@ -5,16 +5,19 @@ var gulp = require('gulp'),
 	ngAnnotate = require('gulp-ng-annotate'),
 	uglify = require('gulp-uglify'),
 	watch = require('gulp-watch'),
+  gulpIf = require('gulp-if'),
   rename = require('gulp-rename'),
 	browserify = require('browserify'),
   source = require('vinyl-source-stream'),
   streamify = require('gulp-streamify'),
   plumber = require('gulp-plumber'),
   del = require('del'),
-  autoprefixer = require('gulp-autoprefixer')
+  template= require('gulp-template'),
+  autoprefixer = require('gulp-autoprefixer'),
+  argv = require('yargs').argv,
   onError = function (err) {  
     console.log(err.toString());
-  },
+  };
   srcPath = 'src';
   distPath = 'dist';
   srcPaths = {
@@ -31,17 +34,22 @@ var gulp = require('gulp'),
     img: distPath + '/img',
     js: distPath + '/js',
     templates: distPath + '/templates'
-  };
+  },
+  env = argv.env || argv.e || 'dev';
+
+console.log(argv);
 
 gulp.task('server', function() {
-	nodemon({script: 'app.js'});
+	nodemon({
+    script: 'app.js',
+    env: { 'NODE_ENV': env }
+  });
 });
 
 gulp.task('watch:scripts', function() {
-  watch(srcPaths.js, function(files, cb) {
+  watch([srcPaths.js, "!" + srcPath + '/js/config.js'], function(files, cb) {
     gulp.start('scripts', cb);
   });
-  gulp.watch('', ['scripts']);
 });
 
 gulp.task('watch:templates', function() {
@@ -74,13 +82,28 @@ gulp.task('clean:images', function (cb) {
   del([distPaths.img + '/*'], cb)
 });
 
-gulp.task('scripts', function() {
+gulp.task('scripts', ['browserify'], function(cb) {
+  del([srcPath + '/js/config.js'], cb);
+});
+
+gulp.task('template:scripts', function() {
+  var templateData = {
+    environment: env
+  };
+
+  gulp.src(['./env_config.js'])
+    .pipe(template(templateData))
+    .pipe(rename('config.js'))
+    .pipe(gulp.dest(srcPath + '/js'))
+});
+
+gulp.task('browserify', ['template:scripts'], function() {
   return browserify('./src/js/main.js')
     .bundle()
     .on('error', onError)
     .pipe(source('main.js'))
     .pipe(streamify(ngAnnotate()))
-    //.pipe(streamify(uglify()))
+    .pipe(gulpIf(env === 'prod', streamify(uglify())))
     .pipe(gulp.dest(distPath + '/js'))
     .pipe(livereload());
 });
@@ -103,7 +126,6 @@ gulp.task('sassy', function() {
     .pipe(gulp.dest(distPath + '/css'))
     .pipe(livereload());
 });
- 
 
 gulp.task('templates', function() {
 	gulp.src(srcPaths.templates)
@@ -129,4 +151,4 @@ gulp.task('images', ['clean:images'], function() {
     .pipe(livereload());
 });
 
-gulp.task('default', ['scripts', 'templates', 'html', 'sassy', 'images', 'watch' ,'server']);
+gulp.task('default', ['scripts', 'templates', 'html', 'sassy', 'images', 'watch' ,'server'])
