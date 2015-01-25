@@ -37,7 +37,7 @@
 				transition: all 200ms $bounce;
 			}
 
-			&:hover, :focus {
+			&:hover, &:focus {
 				background: darken($plum, 5%);
 				text-decoration: none;
 

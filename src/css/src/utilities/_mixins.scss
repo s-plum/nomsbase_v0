@@ -26,6 +26,46 @@ mixins
 	}
 }
 
+@keyframes spin {
+	from {
+		transform: rotateY(0deg);
+	}
+	to {
+		transform: rotateY(360deg);
+	}
+}
+
+@mixin loader($width) {
+	animation: spin 2s infinite linear;
+	display: block;
+	left: 50%;
+	margin-left: ($width / -2);
+	position: absolute;
+	top: 0;
+	transform-style: preserve-3d;
+	width: $width;
+	&:before, &:after {
+		backface-visibility: hidden;
+		box-sizing: border-box;
+		content: "";
+		display: block;
+		height: $width;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: $width;
+	}
+	&:before {
+		background: image-url("nom.svg") no-repeat center/100% auto;
+		transform: rotateY(0deg);
+		z-index: 2;
+	}
+	&:after {
+		background: image-url("plum.svg") no-repeat center/auto 100%;
+		transform: rotateY(180deg);
+	}
+}
+
 
 /* =================================================================
 extends
@@ -131,5 +171,15 @@ extends
 	&:after {
 		content: "\00b0\00a0 F";
 	}
+}
+
+%status-message {
+	background: desaturate($plum, 100%);
+	border-radius: 1px;
+	color: #fff;
+	display: inline-block;
+	font-size: .875em;
+	line-height: 1.25em;
+	padding: 3px 8px;
 }
 

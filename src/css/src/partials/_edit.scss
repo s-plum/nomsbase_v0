@@ -1,6 +1,7 @@
 .recipe-edit {
 	margin-bottom: 2em;
 	overflow: hidden;
+	position: relative;
 
 	.hidden {
 		@extend %wai;
@@ -23,12 +24,16 @@
 			background: #fff;
 			border-color: rgba($plum, .75);
 			outline: 0;
-			@include placeholder {
-				color: rgba($plum, .025);
-			}
 		}
 		@include placeholder {
 			font-weight: 300;
+		}
+
+		&.ng-invalid-required {
+			background-image: image-url("asterisk.svg");
+			background-repeat: no-repeat;
+			background-position: top right;
+			background-size: 1.5rem auto;
 		}
 	}
 
@@ -259,7 +264,9 @@
 
 	.temperature {
 		@extend %temperature;
+		float: left;
 		font-weight: 400;
+		margin-right: 10px;
 		padding: 0 0 0 1.75em;
 
 		&:after {
@@ -280,6 +287,7 @@
 	}
 
 	.notes {
+		clear: both;
 		label {
 			font-style: italic;
 		}
@@ -324,17 +332,32 @@
 
 		input {
 			border: 0;
+			background: none;
 			color: $plum;
+			margin-bottom: .2em;
+			min-width: 12em;
 			@include placeholder {
 				color: $plum;
+			}
+
+			&:focus {
+				@include placeholder {
+					color: transparent;
+				}
 			}
 		}
 	}
 
+	.submit-controls {
+		align-items: flex-start;
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: flex-start;
+	}
+
 	.save {
-		float: right;
-		font-size: 1.5em;
 		font-weight: 300;
+		margin-right: 10px;
 		padding: .25em .75em;
 
 		&:after {
@@ -345,12 +368,85 @@
 			height: 1em;
 			margin-right: 10px;
 			position: relative;
-			top: 2px;
+			top: 1px;
 			width: 1em;
 		}
 
-		&[disabled="disabled"], .ng-pristine & {
-			opacity: .125;
+		&:hover, &:focus {
+			font-size: 1.25em;
+		}
+	}
+
+	.save-overlay {
+		background: rgba($bg, .75);
+		bottom: 0;
+		display: block;
+		font-size: 3em;
+		left: 0;
+		padding-top: 8em;
+		position: fixed;
+		right: 0;
+		top: 0;
+		z-index: 9999;
+
+		p {
+			color: $plum;
+			text-align: center;
+		}
+
+		span {
+			@include loader(4em);
+			top: 3em;
+		}
+	}
+
+	.cancel {
+		background-color: desaturate($plum, 100%);
+		opacity: .4;
+
+		&:hover, &:focus {
+			opacity: 1;
+		}
+	}
+
+	.error-message {
+		span {
+			@extend %status-message;
+		}
+
+		&.temperature-error span {
+			clear: left;
+			float: left;
+			position: relative;
+			top: -.875em;
+		}
+	}
+
+	.form-status-message {
+		@extend %status-message;
+		margin: .75em 0 0;
+
+		&:before {
+			background: image-url("sync.svg") no-repeat top left/100% auto;
+			content: "";
+			display: inline-block;
+			float: left;
+			height: 1em;
+			margin-right: 3px;
+			width: 1em;
+		}
+
+		&.synced:before {
+			background-position: left 1px;
+		}
+
+		&.unsynced:before {
+			background-position: left 50%;
+		}
+
+		&.error:before {
+			background-position: left 100%;
+			width: 1.125em;
 		}
 	}
 }

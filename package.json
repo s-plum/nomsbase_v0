@@ -28,6 +28,7 @@
     "gulp-uglify": "^1.0.2",
     "gulp-util": "^3.0.2",
     "gulp-watch": "^1.0.7",
+    "lodash": "^2.4.1",
     "mongodb": "^1.4.26",
     "mongoose": "~3.8.3",
     "vinyl-source-stream": "^1.0.0",

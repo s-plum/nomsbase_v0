@@ -1,6 +1,6 @@
-<form name="nomsform" class="recipe-edit" novalidate data-ng-show="recipe.ingredientGroups != null">
+<form name="nomsform" class="recipe-edit" novalidate data-ng-show="recipe.ingredientGroups != null" data-ng-submit="RecipeEditor.save(nomsform, recipe)" data-ng-keydown="RecipeEditor.checkSubmit($event)">
 	<label for="recipe-name" class="hidden">Name:</label>
-	<input type="text" id="recipe-name" data-ng-model="recipe.name" required="required" aria-required="true" placeholder="Super Nomtastic {{recipe._id == null ? 'New ' : ''}}Recipe"/>
+	<input type="text" id="recipe-name" data-ng-model="recipe.name" name="name" required="required" aria-required="true" placeholder="Super Nomtastic {{recipe._id == null ? 'New ' : ''}}Recipe"/>
 	
 	<fieldset class="ingredient-groups">
 		<legend>Ingredients</legend>
@@ -8,29 +8,29 @@
 			<fieldset ng-repeat="group in recipe.ingredientGroups" class="ingredient-group">
 				<legend class="hidden">Ingredient Group</legend>
 				<p data-ng-show="recipe.ingredientGroups.length > 1" class="ingredient-group-name">
-					<label for="ingredient-group-name-{{$index}}" class="hidden">Name</label>
-					<input id="ingredient-group-name-{{$index}}" type="text" data-ng-required="recipe.ingredientGroups.length > 1" data-ng-model="group.name"/>
+					<label for="ingredient-group-{{$index}}-name" class="hidden">Name</label>
+					<input id="ingredient-group-{{$index}}-name" type="text" data-ng-required="recipe.ingredientGroups.length > 1" data-ng-model="group.name" name="ingredientGroup[{{$index}}].Name"/>
 				</p>
 				<ul data-ng-show="group.ingredients.length > 0">
 					<li data-ng-repeat="ingredient in group.ingredients">
 						<fieldset>
 							<legend class="hidden">Ingredient</legend>
 							<div>
-								<label for="ingredient-amount-{{$parent.$index}}-{{$index}}" class="hidden">Amount</label>
-								<input type="text" id="ingredient-amount-{{$parent.$index}}-{{$index}}" data-ng-model="ingredient.amount" placeholder="1"/>
+								<label for="ingredient-group-{{$parent.$index}}-amount-{{$index}}" class="hidden">Amount</label>
+								<input type="text" id="ingredient-group-{{$parent.$index}}-amount-{{$index}}" data-ng-model="ingredient.amount" name="ingredientGroup[{{$parent.$index}}].amount[{{$index}}]" placeholder="1"/>
 								
-								<label for="ingredient-unit-{{$parent.$index}}-{{$index}}" class="hidden">Unit</label>
-								<input type="text" id="ingredient-unit-{{$parent.$index}}-{{$index}}" data-ng-model="ingredient.unit" placeholder="cup"/>
+								<label for="ingredient-group-{{$parent.$index}}-unit-{{$index}}" class="hidden">Unit</label>
+								<input type="text" id="ingredient-group-{{$parent.$index}}-unit-{{$index}}" data-ng-model="ingredient.unit" name="ingredientGroup[{{$parent.$index}}].unit[{{$index}}]" placeholder="cup"/>
 
-								<label for="ingredient-type-{{$parent.$index}}-{{$index}}" class="hidden">Type</label>
-								<input type="text" id="ingredient-type-{{$parent.$index}}-{{$index}}" data-ng-model="ingredient.type" placeholder="butter" data-ng-required="!ingredient.unit && !ingredient.amount"/>
+								<label for="ingredient-group-{{$parent.$index}}-type-{{$index}}" class="hidden">Type</label>
+								<input type="text" id="ingredient-group-{{$parent.$index}}-type-{{$index}}" data-ng-model="ingredient.type" name="ingredientGroup[{{$parent.$index}}].type[{{$index}}]" placeholder="butter"/>
 
 								<button type="button" data-ng-click="RecipeEditor.removeIngredient(ingredient, group, recipe)" class="remove-ingredient" title="Remove">Remove</button>
 							</div>
 						</fieldset>
 					</li>
 				</ul>
-				<button type="button" data-ng-click="RecipeEditor.addIngredient(group)" class="add-ingredient">Add ingredient</button>
+				<button type="button" data-ng-click="RecipeEditor.addIngredient(group, $index)" class="add-ingredient">Add ingredient</button>
 				<button type="button" data-ng-show="recipe.ingredientGroups.length > 1" data-ng-click="RecipeEditor.removeIngredientGroup(group, recipe)" class="remove-group" title="Remove group">Remove group</button>
 			</fieldset>
 		</div>
@@ -43,32 +43,48 @@
 		<legend>Instructions</legend>
 		<p>
 			<label for="recipe-instructions" class="hidden">Instructions</label>
-			<textarea id="recipe-instructions" placeholder="Combine all ingredients. Add more butter." data-ng-model="recipe.instructions" required></textarea>
+			<textarea id="recipe-instructions" placeholder="Combine all ingredients. Add more butter." data-ng-model="recipe.instructions" name="instructions" required="required" aria-required="true"></textarea>
 		</p>
 		<p class="temperature">
 			<label for="recipe-temp" class="hidden">Baking Temperature (&deg;F)</label>
-			<input type="number" id="recipe-temp" placeholder="350" min="125" max="500" ng-model="recipe.bakingTemp"/>
+			<input type="number" id="recipe-temp" placeholder="350" min="125" max="500" data-ng-model="recipe.bakingTemp" name="bakingTemp"/>
 		</p>
+		<span class="temperature-error error-message" data-ng-show="nomsform.bakingTemp.$touched">
+	    	<span data-ng-show="nomsform.bakingTemp.$error.number">Hmm... that's not a number...</span>
+	    	<span data-ng-show="nomsform.bakingTemp.$error.min || nomsform.bakingTemp.$error.max">Try again. Temperatures should be between 125 &deg;F and 500 &deg;F.</span>
+	    </span>
 		<p class="notes">
 			<label for="recipe-notes">Notes:</label>
-			<textarea id="recipe-notes" placeholder="Do not feed after midnight." ng-model="recipe.notes"></textarea>
+			<textarea id="recipe-notes" placeholder="Do not feed after midnight." data-ng-model="recipe.notes" name="notes"></textarea>
 		</p>
 	</fieldset>
 	
 	<fieldset class="tags">
 		<legend>Tags</legend>
-		<ul>
-			<li data-ng-repeat="tag in recipe.tags"><a href="#" ng-click="RecipeEditor.removeTag(tag, recipe.tags)" class="button">{{ tag }}</a></li>
+		<ul data-ng-click="RecipeEditor.addTag(recipe)">
+			<li data-ng-repeat="tag in recipe.tags"><a href="#" ng-click="RecipeEditor.removeTag($event, tag, recipe.tags)" class="button">{{ tag }}</a></li>
 			<li>
 				<label for="recipe-tag" class="hidden">Add Tag</label>
-				<input type="text" id="recipe-tag" placeholder="type and press enter to add" data-ng-enter="RecipeEditor.addTag(recipe)" data-ng-model="recipe.newtag" aria-label="tags: type and press enter to add"/>
+				<input type="text" id="recipe-tag" placeholder="type and press enter to add" data-ng-keydown="RecipeEditor.editTags($event, recipe)" data-ng-model="RecipeEditor.newtag" aria-label="tags: type and press enter to add" data-ng-blur="RecipeEditor.clearTag()"/>
 			</li>
 		</ul>
-		<div>
-			
-			
-		</div>
 	</fieldset>
 	
-	<button ng-disabled="(nomsform.$invalid || nomsform.$pristine)" ng-click="RecipeEditor.save(recipe)" class="button save">Save</button>
+	<div class="submit-controls">
+		<button data-ng-hide="nomsform.$invalid || !RecipeEditor.hasChanges(recipe)" class="button save">Save</button>
+		<button class="button cancel" data-ng-click="RecipeEditor.cancel(recipe)" type="button">Cancel</button>	
+	</div>
+	<p class="form-status-message" data-ng-class="{synced: !RecipeEditor.hasChanges(recipe) && nomsform.$valid,
+													unsynced: RecipeEditor.hasChanges(recipe) && nomsform.$valid,
+													error: nomsform.$invalid}">
+		nomsbase status: <span data-ng-show="!RecipeEditor.hasChanges(recipe) && nomsform.$valid">synced</span>
+		<span data-ng-show="RecipeEditor.checkErrorType(nomsform) === 'required'">missing required (<b class="asterisk">*</b>) fields are preventing the nomsbase update</span>
+		<span data-ng-show="RecipeEditor.checkErrorType(nomsform) === 'general'">errors are preventing the nomsbase update</span>
+		<span data-ng-show="RecipeEditor.hasChanges(recipe) && nomsform.$valid">ready to sync</span>
+	</p>
+
+	<div class="save-overlay" data-ng-show="RecipeEditor.isSaving">
+		<span aria-hidden="true"></span>
+		<p>Saving...</p>
+	</span>
 </form>

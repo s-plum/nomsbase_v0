@@ -37,8 +37,6 @@ var gulp = require('gulp'),
   },
   env = argv.env || argv.e || 'dev';
 
-console.log(argv);
-
 gulp.task('server', function() {
 	nodemon({
     script: 'app.js',
