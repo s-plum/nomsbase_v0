@@ -1,7 +1,9 @@
 <div class="recipe-search-list">
 	<h1>nomsbase query: <span class="query">{{searchTerm}}</span></h1> 
-	<ul data-ng-if="recipes.length > 0" data-ng-repeat="recipe in recipes">
-		<li><a href="/recipe/{{recipe.recipeid}}/{{ recipe.name.toLowerCase().replace(urlRegex, '-') }}">{{recipe.name}}</a></li>
+	<ul data-ng-if="recipes.length > 0">
+		<li data-ng-repeat="recipe in recipes">
+			<a href="/recipe/{{recipe.recipeid}}/{{ recipe.name.toLowerCase().replace(urlRegex, '-') }}"><b>{{recipe.name}}</b></a>
+		</li>
 	</ul>
 
 	<div data-ng-if="recipes.length === 0 && resultsLoaded" class="no-results">

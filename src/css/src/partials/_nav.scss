@@ -417,7 +417,6 @@ nav.home {
 		@for $a from 1 through 6 {
 			li:nth-child(#{$a}) {
 				a {
-					-webkit-transition-delay: ($a - 1)*200 + $homeDelay;
 					transition-delay: ($a - 1)*200 + $homeDelay;
 				}
 			}
@@ -426,9 +425,7 @@ nav.home {
 		@for $i from 0 through 2 {
 			li:nth-child(#{(2 * $i) + 1}), li:nth-child(#{(2 * $i) + 2}) {
 				a {
-					-webkit-transition-duration: 200ms + ($i * 25ms);
 					transition-duration: 200ms + ($i * 25ms);
-					-webkit-transition-timining-function: cubic-bezier(0.175, 0.6 - (.2 * $i), 0.32, 1.275 - (.05 * $i));
 					transition-timing-function: cubic-bezier(0.175, 0.6 - (.2 * $i), 0.32, 1.275 - (.05 * $i));
 				}
 			}
@@ -438,9 +435,7 @@ nav.home {
 			@for $i from 0 through 1 {
 				li:nth-child(#{(3 * $i) + 1}), li:nth-child(#{(3 * $i) + 2}), li:nth-child(#{(3 * $i) + 3}) {
 					a {
-						-webkit-transition-duration: 200ms + ($i * 25ms);
 						transition-duration: 200ms + ($i * 25ms);
-						-webkit-transition-timining-function: cubic-bezier(0.175, 0.6 - (.2 * $i), 0.32, 1.275 - (.05 * $i));
 						transition-timing-function: cubic-bezier(0.175, 0.6 - (.2 * $i), 0.32, 1.275 - (.05 * $i));
 					}
 				}

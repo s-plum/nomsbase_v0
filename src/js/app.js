@@ -315,6 +315,7 @@ nomsbase.controller('MainCtrl', function($scope, $location, Page) {
 		}
 	}
 	$scope.menuOpen = false;
+
 	$scope.isHome = function() {
 		return $location.$$path === '/';
 	};
@@ -327,7 +328,7 @@ nomsbase.controller('MainCtrl', function($scope, $location, Page) {
 		else {
 			e.target.blur();
 		}
-		if (!menuBreak.matches) {
+		if (!menuBreak.matches && !$scope.isHome()) {
 			$scope.menuOpen = !$scope.menuOpen;
 		}
 	};
