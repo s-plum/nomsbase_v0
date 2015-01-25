@@ -8,7 +8,7 @@ var _ = {
 
 var config = require('./config');
 
-var nomsbase = angular.module('nomsbase',['ngRoute'])
+var nomsbase = angular.module('nomsbase',['ngRoute', 'ngAria'])
 	.config(function($routeProvider, $locationProvider) {
 		$routeProvider.when('/', {});
 		$routeProvider.when('/recipe/:id', {
