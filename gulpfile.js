@@ -103,7 +103,7 @@ gulp.task('browserify', ['template:scripts'], function() {
     .pipe(streamify(ngAnnotate()))
     .pipe(gulpIf(env === 'prod', streamify(uglify())))
     .pipe(gulp.dest(distPath + '/js'))
-    .pipe(livereload());
+    .pipe(gulpIf(env === 'dev', livereload()));
 });
 
 gulp.task('sassy', function() {
@@ -122,7 +122,7 @@ gulp.task('sassy', function() {
         cascade: false
     }))
     .pipe(gulp.dest(distPath + '/css'))
-    .pipe(livereload());
+    .pipe(gulpIf(env === 'dev', livereload()));
 });
 
 gulp.task('templates', function() {
@@ -131,7 +131,7 @@ gulp.task('templates', function() {
       errorHandler: onError
     }))
     .pipe(gulp.dest(distPaths.templates))
-		.pipe(livereload());
+	.pipe(gulpIf(env === 'dev', livereload()));
 });
 
 gulp.task('html', function() {
@@ -140,13 +140,13 @@ gulp.task('html', function() {
       errorHandler: onError
     }))
     .pipe(gulp.dest(distPaths.html))
-    .pipe(livereload());
+    .pipe(gulpIf(env === 'dev', livereload()));
 });
 
 gulp.task('images', ['clean:images'], function() {
   gulp.src(srcPaths.img)
     .pipe(gulp.dest(distPaths.img))
-    .pipe(livereload());
+    .pipe(gulpIf(env === 'dev', livereload()));
 });
 
 gulp.task('default', ['scripts', 'templates', 'html', 'sassy', 'images', 'watch' ,'server'])

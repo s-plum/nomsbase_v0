@@ -1,10 +1,6 @@
 var menuBreak = window.matchMedia('(min-width: 650px)');
 
-var _ = {
-	clone: require('./vendor/lodash/objects/clone').clone,
-	forEach: require('./vendor/lodash/collections/forEach').forEach,
-	filter: require('./vendor/lodash/collections/filter').filter
-};
+var _ = require('lodash');
 
 var config = require('./config');
 

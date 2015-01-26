@@ -89,6 +89,11 @@ nav {
 		margin: 10px 0;
 		padding: 0;
 		width: 100%;
+
+		&:hover, &:focus {
+			outline: 0;
+		}
+
 		@include breakpoint($small) {
 			flex-flow: row nowrap;
 			margin: 0;
