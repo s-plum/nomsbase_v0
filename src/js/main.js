@@ -1,3 +1,5 @@
+'use strict';
+
 var angular = require('angular');
 require('angular-aria');
 require('angular-router-browserify')(angular);
