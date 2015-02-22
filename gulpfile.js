@@ -116,7 +116,7 @@ gulp.task('browserify', ['template:scripts'], function() {
     .on('error', config.errorHandler)
     .pipe(source('main.js'))
     .pipe(streamify(ngAnnotate()))
-    .pipe(gulpIf(config.env === 'prod', streamify(uglify())))
+    .pipe(gulpIf(config.env === 'prod', streamify(uglify({mangle: false}))))
     .pipe(gulp.dest(distPath + '/js'))
     .pipe(gulpIf(config.env === 'dev', livereload()));
 });

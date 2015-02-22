@@ -1,6 +1,9 @@
 'use strict';
 
+var config = require('../config');
+
 var ViewCtrl = function($scope, $http, $routeParams, $sce, $location, Page) {
+	$scope.canEdit = config.environment === 'dev';
 	$scope.recipe = {
 		name: ''
 	};

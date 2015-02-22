@@ -14,6 +14,29 @@
 		margin: 0 0 1em;
 	}
 
+	.recipe-name {
+		padding-right: 2.5em;
+		position: relative;
+	}
+
+	.edit-link {
+		background: image-url("edit.svg") no-repeat right top / 50% auto;
+		height: 2.5em;
+		opacity: .333;
+		overflow: hidden;
+		position: absolute;
+		right: 0;
+		text-indent: -9999em;
+		transition: all 200ms ease;
+		top: 0;
+		width: 2.5em;
+		-webkit-backface-visibility: hidden;
+
+		&:hover, &:focus {
+			opacity: 1;
+		}
+	}
+
 	.image {
 		width: 100%;
 		@include breakpoint($small) {
