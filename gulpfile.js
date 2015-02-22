@@ -15,9 +15,6 @@ var gulp = require('gulp'),
   template= require('gulp-template'),
   autoprefixer = require('gulp-autoprefixer'),
   argv = require('yargs').argv,
-  onError = function (err) {  
-    console.log(err.toString());
-  };
   srcPath = 'src';
   distPath = 'dist';
   srcPaths = {
@@ -34,13 +31,31 @@ var gulp = require('gulp'),
     img: distPath + '/img',
     js: distPath + '/js',
     templates: distPath + '/templates'
+  };
+
+var environments = {
+  dev: {
+    tasks: ['scripts', 'templates', 'html', 'sassy', 'images', 'watch' ,'server'],
+    nodeArgs: ['--debug']
   },
-  env = argv.env || argv.e || 'dev';
+  prod: {
+    tasks: ['scripts', 'templates', 'html', 'sassy', 'images' ,'server'],
+    nodeArgs: []
+  }
+}
+
+var config = {
+  port: 3000,
+  env: argv.env || argv.e || 'dev',
+  errorHandler: function(err) {
+    console.log(err.toString())
+  }
+};
 
 gulp.task('server', function() {
 	nodemon({
     script: 'app.js',
-    env: { 'NODE_ENV': env }
+    env: { 'NODE_ENV': config.env }
   });
 });
 
@@ -86,7 +101,7 @@ gulp.task('scripts', ['browserify'], function(cb) {
 
 gulp.task('template:scripts', function() {
   var templateData = {
-    environment: env
+    environment: config.env
   };
 
   gulp.src(['./env_config.js'])
@@ -98,18 +113,18 @@ gulp.task('template:scripts', function() {
 gulp.task('browserify', ['template:scripts'], function() {
   return browserify('./src/js/main.js')
     .bundle()
-    .on('error', onError)
+    .on('error', config.errorHandler)
     .pipe(source('main.js'))
     .pipe(streamify(ngAnnotate()))
-    .pipe(gulpIf(env === 'prod', streamify(uglify())))
+    .pipe(gulpIf(config.env === 'prod', streamify(uglify())))
     .pipe(gulp.dest(distPath + '/js'))
-    .pipe(gulpIf(env === 'dev', livereload()));
+    .pipe(gulpIf(config.env === 'dev', livereload()));
 });
 
 gulp.task('sassy', function() {
   gulp.src(srcPaths.sass)
     .pipe(plumber({
-      errorHandler: onError
+      errorHandler: config.errorHandler
     }))
     .pipe(compass({
       config_file: 'config.rb',
@@ -122,31 +137,31 @@ gulp.task('sassy', function() {
         cascade: false
     }))
     .pipe(gulp.dest(distPath + '/css'))
-    .pipe(gulpIf(env === 'dev', livereload()));
+    .pipe(gulpIf(config.env === 'dev', livereload()));
 });
 
 gulp.task('templates', function() {
 	gulp.src(srcPaths.templates)
 		.pipe(plumber({
-      errorHandler: onError
+      errorHandler: config.errorHandler
     }))
     .pipe(gulp.dest(distPaths.templates))
-	.pipe(gulpIf(env === 'dev', livereload()));
+	.pipe(gulpIf(config.env === 'dev', livereload()));
 });
 
 gulp.task('html', function() {
   gulp.src(srcPaths.html)
     .pipe(plumber({
-      errorHandler: onError
+      errorHandler: config.errorHandler
     }))
     .pipe(gulp.dest(distPaths.html))
-    .pipe(gulpIf(env === 'dev', livereload()));
+    .pipe(gulpIf(config.env === 'dev', livereload()));
 });
 
 gulp.task('images', ['clean:images'], function() {
   gulp.src(srcPaths.img)
     .pipe(gulp.dest(distPaths.img))
-    .pipe(gulpIf(env === 'dev', livereload()));
+    .pipe(gulpIf(config.env === 'dev', livereload()));
 });
 
-gulp.task('default', ['scripts', 'templates', 'html', 'sassy', 'images', 'watch' ,'server'])
+gulp.task('default', environments[config.env].tasks);
