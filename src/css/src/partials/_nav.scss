@@ -519,6 +519,7 @@ nav.home {
 		&.loading {
 			h1 a{
 				opacity: 0;
+				transition: none;
 			}
 			@for $i from 0 through 2 {
 				li:nth-child(#{(2 * $i) + 1}), li:nth-child(#{(2 * $i) + 2}) {

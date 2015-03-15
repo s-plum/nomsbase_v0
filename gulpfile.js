@@ -39,7 +39,7 @@ var environments = {
     nodeArgs: ['--debug']
   },
   prod: {
-    tasks: ['scripts', 'templates', 'html', 'sassy', 'images' ,'server'],
+    tasks: ['scripts', 'templates', 'html', 'sassy', 'images', 'server'],
     nodeArgs: []
   }
 }

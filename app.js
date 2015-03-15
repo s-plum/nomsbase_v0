@@ -1,23 +1,23 @@
 //declare dependencies
-var express = require('express'), //templating
+var express = require('express'),
+	app = express();
 	routes = require('./routes'),
 	http = require('http'),
 	path = require('path'),
 	mongoose = require('mongoose'),
 	api = require('./routes/api'),
-	//ObjectID = require('mongodb').ObjectID,
-	distPath = '/dist';
+	distPath = '/dist',
+	dbStrings = require('./admin/db-connect'),
+	env = app.get('env') || 'dev';
 
 //connect to database	
-mongoose.connect('mongodb://localhost:27017/nomsbase');
+mongoose.connect(dbStrings[env]);
+
 var db = mongoose.connection;
+
 db.once('connected', function() {
 	console.log("Connected to database");
 });
-
-
-
-var app = express();
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.favicon(path.join(__dirname, distPath + '/img/favicon.ico')));
@@ -29,14 +29,14 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, distPath)));
 
 // development only
-if ('dev' == app.get('env')) {
+if (env === 'dev') {
   app.use(express.errorHandler());
 }
 
-//for views
 app.get('/', routes.index);
 
 //data get/set
+app.post('/login', api.validateUser(db));
 app.post('/add', api.add(db));
 app.post('/update/:id', api.update(db));
 app.get('/get/:id', api.get(db));

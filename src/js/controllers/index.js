@@ -7,5 +7,6 @@ module.exports = {
 	NewCtrl: require('./newCtrl'),
 	RandomCtrl: require('./randomCtrl'),
 	SearchCtrl: require('./searchCtrl'),
-	ViewCtrl: require('./viewCtrl')
+	ViewCtrl: require('./viewCtrl'),
+	LoginCtrl: require('./loginCtrl')
 };

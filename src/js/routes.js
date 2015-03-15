@@ -32,7 +32,10 @@ var routeConfig = function($routeProvider, $locationProvider) {
 			controller: 'EditCtrl'
 		});
 	}
-	
+	$routeProvider.when('/login', {
+		templateUrl: '/templates/login.html',
+		controller: 'LoginCtrl'
+	});
 	$routeProvider.when('/random', {
 		templateUrl: '/templates/random.html',
 		controller: 'RandomCtrl'

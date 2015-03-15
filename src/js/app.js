@@ -3,9 +3,11 @@
 var routes = require('./routes');
 var services = require('./services');
 var controllers = require('./controllers/index');
+var auth = require('./auth');
 
 var nomsbase = angular.module('nomsbase',['ngRoute', 'ngAria'])
-	.config(routes);
+	.config(routes)
+	.run(auth);
 
 
 for (var s in services) {

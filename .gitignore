@@ -5,4 +5,4 @@ dist/
 src/vendor
 *.txt
 *.log
-
+admin/
