@@ -1,11 +1,10 @@
 'use strict';
 
 var menuBreak = window.matchMedia('(min-width: 650px)');
-var config = require('../config');
+var _ = require('lodash');
 
 var NavCtrl = function($scope, $location, Page) {
 	$scope.Page = Page;
-	$scope.appConfig = config;
 	$scope.urlRegex = /\s/g;
 	$scope.searchTerm = '';
 
@@ -22,7 +21,16 @@ var NavCtrl = function($scope, $location, Page) {
 			searchInput.blur();
 		}
 	}
+
 	$scope.menuOpen = false;
+	$scope.activeLinkClass = $location.$$path.indexOf('recipes') >= 0 ? $location.$$path.split('/')[2].split('+')[0] : '';
+
+	//bind toggle menu
+	_.each(document.getElementById('nav').getElementsByTagName('a'), function(a, index) {
+		a.addEventListener('click', function(e) {
+			$scope.toggleMenu(e);
+		});
+	});
 
 	$scope.isHome = function() {
 		return $location.$$path === '/';

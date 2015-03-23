@@ -1,15 +1,13 @@
 'use strict';
 
-var config = require('../config');
-
-var ViewCtrl = function($scope, $http, $routeParams, $sce, $location, Page) {
-	$scope.canEdit = config.environment === 'dev';
+var ViewCtrl = function($scope, $rootScope, $http, $routeParams, $sce, $location, Page) {
+	$scope.canEdit = $rootScope.user != null;
 	$scope.recipe = {
 		name: ''
 	};
 	var id = $routeParams.id;
 	$http({method:'GET', url: '/get/'+id})
-		.success(function(data, status, headers, config) {
+		.success(function(data, status, headers) {
 			if (!data.error) {
 				Page.setTitle(data.name);
 				$location.path('/recipe/' + data.recipeid + '/' + data.name.toLowerCase().replace(/\s/g, '-')).replace();

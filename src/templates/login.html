@@ -1,5 +1,9 @@
-<form name="nomsbase-login" method="post" data-ng-submit="login()">
-	<input name="username" type="text" required="required" aria-required="true" ng-model="user.username"/>
-	<input name="password" type="password" required="required" aria-required="true" ng-model="user.password"/>
-	<button>Test</button>
-</form>
+<div class="sudo-login">
+	<form name="nomsbase-login" method="post" data-ng-submit="login()">
+		<label for="username">Username</label>
+		<input id="username" name="username" type="text" required="required" aria-required="true" ng-model="user.username" placeholder="username" autocomplete="off"/>
+		<label for="password">Password</label>
+		<input id="password" name="password" type="password" required="required" aria-required="true" ng-model="user.password" placeholder="password" autocomplete="off"/>
+		<button class="button">sudo</button>
+	</form>
+</div>

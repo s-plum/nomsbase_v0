@@ -12,7 +12,6 @@ var gulp = require('gulp'),
   streamify = require('gulp-streamify'),
   plumber = require('gulp-plumber'),
   del = require('del'),
-  template= require('gulp-template'),
   autoprefixer = require('gulp-autoprefixer'),
   argv = require('yargs').argv,
   srcPath = 'src';
@@ -99,18 +98,7 @@ gulp.task('scripts', ['browserify'], function(cb) {
   del([srcPath + '/js/config.js'], cb);
 });
 
-gulp.task('template:scripts', function() {
-  var templateData = {
-    environment: config.env
-  };
-
-  gulp.src(['./env_config.js'])
-    .pipe(template(templateData))
-    .pipe(rename('config.js'))
-    .pipe(gulp.dest(srcPath + '/js'))
-});
-
-gulp.task('browserify', ['template:scripts'], function() {
+gulp.task('browserify', function() {
   return browserify('./src/js/main.js')
     .bundle()
     .on('error', config.errorHandler)

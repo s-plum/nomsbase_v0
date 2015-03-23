@@ -1,7 +1,5 @@
 'use strict';
 
-var config = require('./config');
-
 var routeConfig = function($routeProvider, $locationProvider) {
 	$routeProvider.when('/', {});
 	$routeProvider.when('/recipe/:id', {
@@ -16,22 +14,18 @@ var routeConfig = function($routeProvider, $locationProvider) {
 		controller: 'SearchCtrl',
 		templateUrl: '/templates/search.html'
 	});
-
-	//new and edit only available in dev
-	if (config.environment === 'dev') {
-		$routeProvider.when('/new', {
-			templateUrl: '/templates/edit.html',
-			controller: 'NewCtrl'
-		});
-		$routeProvider.when('/edit/:id', {
-			templateUrl: '/templates/edit.html',
-			controller: 'EditCtrl'
-		});
-		$routeProvider.when('/edit/:id/:name', {
-			templateUrl: '/templates/edit.html',
-			controller: 'EditCtrl'
-		});
-	}
+	$routeProvider.when('/new', {
+		templateUrl: '/templates/edit.html',
+		controller: 'NewCtrl'
+	});
+	$routeProvider.when('/edit/:id', {
+		templateUrl: '/templates/edit.html',
+		controller: 'EditCtrl'
+	});
+	$routeProvider.when('/edit/:id/:name', {
+		templateUrl: '/templates/edit.html',
+		controller: 'EditCtrl'
+	});
 	$routeProvider.when('/login', {
 		templateUrl: '/templates/login.html',
 		controller: 'LoginCtrl'

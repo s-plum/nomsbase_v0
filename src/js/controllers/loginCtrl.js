@@ -8,6 +8,8 @@ var LoginCtrl = function($rootScope, $scope, $location, $http, Page) {
 		password: ''
 	};
 
+	document.getElementById('username').focus();
+
 	$scope.login = function() {
 		$http({
 			method:'POST',
@@ -19,7 +21,6 @@ var LoginCtrl = function($rootScope, $scope, $location, $http, Page) {
 					$location.path('/404').search('n', null);
 				}
 				else {
-					console.log($location.$$search.n);
 					$rootScope.user = $scope.user.username;
 					$location.path($location.$$search.n || '/').search('n', null);
 				}
