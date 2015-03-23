@@ -2,6 +2,8 @@
 
 var menuBreak = window.matchMedia('(min-width: 650px)');
 var _ = require('lodash');
+var footerDebounce = true,
+	footerTimeout;
 
 var NavCtrl = function($scope, $location, Page) {
 	$scope.Page = Page;
@@ -70,6 +72,18 @@ var NavCtrl = function($scope, $location, Page) {
 	}
 
 	$scope.loaded = true;
+
+	window.addEventListener('resize', function() {
+		if (footerDebounce) {
+			footerDebounce = false;
+			clearTimeout(footerTimeout);
+			footerTimeout = setTimeout(function() {
+				Page.setFooterPosition();
+				footerDebounce = true;
+			}, 200);
+		}
+	});
+	
 };
 
 module.exports = NavCtrl;

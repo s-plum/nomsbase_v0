@@ -1,0 +1,22 @@
+footer {
+	box-sizing: border-box;
+	color: rgba($plum, .5);
+	font-size: .75em;
+	font-weight: 400;
+	order: 3;
+	padding: 10px;
+	text-align: center;
+	width: 100%;
+
+	a {
+		color: rgba($plum, .5);
+		&:hover, &:focus {
+			color: $plum;
+		}
+	}
+
+	[data-short-content="true"] & {
+		bottom: 0;
+		position: absolute;
+	}
+}

@@ -12,6 +12,10 @@ var ViewCtrl = function($scope, $rootScope, $http, $routeParams, $sce, $location
 				Page.setTitle(data.name);
 				$location.path('/recipe/' + data.recipeid + '/' + data.name.toLowerCase().replace(/\s/g, '-')).replace();
 				$scope.recipe = data;
+				setTimeout(function(){
+					Page.setFooterPosition();
+				}, 10);
+				
 			}
 			else {
 				$location.path('/404');

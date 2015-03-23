@@ -4,9 +4,21 @@ var _ = require('lodash');
 
 var Page = function() {
 	var title = 'nomsbase';
+
+	var setFooterPosition = function() {
+		document.getElementsByTagName('html')[0].removeAttribute('data-short-content');
+		if (document.getElementsByTagName('body')[0].clientHeight < window.innerHeight) {
+			document.getElementsByTagName('html')[0].setAttribute('data-short-content', 'true');
+		}
+		else {
+			document.getElementsByTagName('html')[0].removeAttribute('data-short-content');
+		}
+	};
+
 	return {
 		title: function() { return title; },
-		setTitle: function(newTitle) { title = newTitle }
+		setTitle: function(newTitle) { title = newTitle },
+		setFooterPosition: setFooterPosition
 	}
 };
 

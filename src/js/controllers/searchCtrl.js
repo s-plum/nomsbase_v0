@@ -10,6 +10,7 @@ var SearchCtrl = function($scope, $http, $location, $routeParams, Page) {
 		.success(function(data, status, headers, config) {
 			if (!data.error) {
 				$scope.recipes = data;
+				Page.setFooterPosition();
 			}	
 			$scope.resultsLoaded = true;
 		})

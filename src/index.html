@@ -10,6 +10,7 @@
 <body data-ng-class="{ home: isHome() }" data-loaded={{loaded}}>
     <a href="#nav" id="skip-to-nav" data-ng-click="toggleMenu($event)" data-ng-class="{ open: menuOpen }">Skip to Navigation</a>
     <main data-ng-view></main>
+    <footer role="contentinfo" data-ng-show="!isHome()">noms baked, photographed, logged, and nommed by <a href="//stephanieplumeri.net">plum</a></footer>
     <nav data-ng-class="{ home: isHome(), open: menuOpen, loading: !homeLoaded }" class="loading">
         <div>
             <h1 id="nav-label"><a href="/" data-ng-click="toHome()">nomsbase</a></h1>

@@ -2,6 +2,7 @@
 
 var LoginCtrl = function($rootScope, $scope, $location, $http, Page) {
 	Page.setTitle('Admin Login');
+	Page.setFooterPosition();
 
 	$scope.user = {
 		username: '',

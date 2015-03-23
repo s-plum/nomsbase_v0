@@ -14,6 +14,9 @@ var EditCtrl = function($scope, $http, $routeParams, $location, Page, RecipeEdit
 			else {
 				RecipeEditor.setChangeTracker(data);
 				$scope.recipe = data;
+				setTimeout(function(){
+					Page.setFooterPosition();
+				}, 10);
 				Page.setTitle('nomsbase update: ' + data.name);
 				$location.path('/edit/' + data.recipeid + '/' + data.name.toLowerCase().replace(/\s/g, '-')).replace();
 			}
