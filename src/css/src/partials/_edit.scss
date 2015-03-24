@@ -77,6 +77,51 @@
 		}
 	}
 
+	.recipe-image {
+		position: relative;
+		@include breakpoint($small) {
+			float: left;
+			margin-right: 2em;
+			width: 40%;
+		}
+		legend, input[type="file"] {
+			@extend %wai;
+			border: 0;
+			height: 0;
+			width: 0;
+		}
+		label {
+			background: image-url("camera.svg") no-repeat center / 60px auto;
+			display: block;
+			cursor: pointer;
+			height: 100%;
+			left: 0;
+			opacity: .5;
+			position: absolute;
+			text-indent: -9999em;
+			transition: opacity 200ms ease;
+			top: 0;
+			width: 100%;
+
+			&:hover, &:focus {
+				opacity: 1;
+			}
+		}
+
+		&.no-image {
+			.preview {
+				background: rgba($plum, .05);
+				border: 1px $plum dashed;
+				border-radius: 3px;
+				min-height: 100px;
+
+				@include breakpoint($small) {
+					min-height: 300px;
+				}
+			}
+		}
+	}
+
 	.ingredient-group-name {
 		margin: 0 0 .5em;
 		padding-right: 2.125em;
@@ -87,31 +132,31 @@
 
 	.ingredient-groups {
 		position: relative;
-		> div {
-			display: flex;
-			flex-flow: row wrap;
-			justify-content: space-between;
-		}
+		// > div {
+		// 	display: flex;
+		// 	flex-flow: row wrap;
+		// 	justify-content: space-between;
+		// }
 	}
 
 	.ingredient-group {
 		box-sizing: border-box;
 		margin-bottom: 1em;
 		position: relative;
-		width: 100%;
-		@include breakpoint(900px) {
-			width: 50%;
-			&:nth-child(odd) {
-				padding-right: 2em;
+		// width: 100%;
+		// @include breakpoint(900px) {
+		// 	width: 50%;
+		// 	&:nth-child(odd) {
+		// 		padding-right: 2em;
 
-				.remove-group {
-					right: 2em;
-				}
-			}
-			&:nth-child(even) {
-				padding-left: 2em;
-			}
-		}
+		// 		.remove-group {
+		// 			right: 2em;
+		// 		}
+		// 	}
+		// 	&:nth-child(even) {
+		// 		padding-left: 2em;
+		// 	}
+		// }
 
 		ul {
 			list-style: none;

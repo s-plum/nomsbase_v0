@@ -41,7 +41,7 @@
 		width: 100%;
 		@include breakpoint($small) {
 			float: left;
-			margin-left: 2em;
+			margin-right: 2em;
 			width: 40%;
 		}
 	}
@@ -88,6 +88,10 @@
 				}
 			}
 		}
+	}
+
+	.instructions {
+		clear: both;
 	}
 
 	.notes p, .instructions p {

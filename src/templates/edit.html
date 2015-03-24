@@ -1,6 +1,15 @@
-<form name="nomsform" class="recipe-edit" novalidate data-ng-show="recipe.ingredientGroups != null" data-ng-submit="RecipeEditor.save(nomsform, recipe)" data-ng-keydown="RecipeEditor.checkSubmit($event)">
+<form name="nomsform" class="recipe-edit" novalidate data-ng-show="recipe.ingredientGroups != null" data-ng-submit="RecipeEditor.save(nomsform, recipe)" data-ng-keydown="RecipeEditor.checkSubmit($event)" enctype="multipart/form-data">
 	<label for="recipe-name" class="hidden">Name:</label>
 	<input type="text" id="recipe-name" data-ng-model="recipe.name" name="name" required="required" aria-required="true" placeholder="Super Nomtastic {{recipe._id == null ? 'New ' : ''}}Recipe"/>
+
+	<fieldset class="recipe-image no-image">
+		<legend>Image</legend>
+		<div class="preview">
+			
+		</div>
+		<label for="recipe-image">Upload image</label>
+		<input type="file" id="recipe-image" data-ng-model="recipe.imageFile"/>
+	</fieldset>
 	
 	<fieldset class="ingredient-groups">
 		<legend>Ingredients</legend>
