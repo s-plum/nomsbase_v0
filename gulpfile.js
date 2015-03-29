@@ -91,7 +91,7 @@ gulp.task('watch:sass', function() {
 gulp.task('watch', ['watch:scripts','watch:templates', 'watch:html','watch:images','watch:sass']);
 
 gulp.task('clean:images', function (cb) {
-  del([distPaths.img + '/*'], cb)
+  del([distPaths.img + '/*', '!' + distPaths.img + '/recipe-img'], cb)
 });
 
 gulp.task('scripts', ['browserify'], function(cb) {

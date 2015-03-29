@@ -209,21 +209,35 @@ var RecipeEditor = function($http, $location, $timeout) {
 			}
 
 			//remove empty ingredients
-			_.forEach(recipe.ingredientGroups, function(group, index) {
-				group.ingredients = _.filter(group.ingredients, function(ingredient) {
-					return !isNullOrEmpty(ingredient.amount) || !isNullOrEmpty(ingredient.type) || !isNullOrEmpty(ingredient.unit);
-				});
-				if (group.ingredients.length === 0) {
-					recipe.ingredientGroups.splice(index, 1);
-				}
-			});
+			// _.forEach(recipe.ingredientGroups, function(group, index) {
+			// 	group.ingredients = _.filter(group.ingredients, function(ingredient) {
+			// 		return !isNullOrEmpty(ingredient.amount) || !isNullOrEmpty(ingredient.type) || !isNullOrEmpty(ingredient.unit);
+			// 	});
+			// 	if (group.ingredients.length === 0) {
+			// 		recipe.ingredientGroups.splice(index, 1);
+			// 	}
+			// });
+
+			//get image
+			var imageInput = document.querySelector('input[type="file"]');
+			var files = [];
+			if (imageInput.files.length > 0) {
+				files.push(imageInput.files[0]);
+			}
 
 			$http({
 				url : url,
-				data : recipe,
+				data : { recipe: recipe, files: files },
 				method : 'POST',
-				contentType: 'application/json; charset=utf-8',
-				dataType: 'json'
+				headers: {'Content-Type': undefined },
+				transformRequest: function (data) {
+	                var formData = new FormData();
+	                formData.append('recipe', angular.toJson(data.recipe));
+	                for (var i = 0; i < data.files.length; i++) {
+	                    formData.append("file" + i, data.files[i]);
+	                }
+	                return formData;
+	            },
 			})
 			.success(function(data) {
 				//750ms delay to show save screen

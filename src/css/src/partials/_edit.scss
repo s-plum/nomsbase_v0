@@ -108,6 +108,17 @@
 			}
 		}
 
+		.preview {
+			border-radius: 2px;
+			overflow: hidden;
+
+			img {
+				display: block;
+				height: auto;
+				max-width: 100%;
+			}
+		}
+
 		&.no-image {
 			.preview {
 				background: rgba($plum, .05);
@@ -305,6 +316,10 @@
 
 	#recipe-instructions {
 		min-height: 200px;
+	}
+
+	.instructions {
+		clear: both;
 	}
 
 	.temperature {

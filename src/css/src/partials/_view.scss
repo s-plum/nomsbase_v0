@@ -38,11 +38,19 @@
 	}
 
 	.image {
+		border-radius: 2px;
+		overflow: hidden;
 		width: 100%;
 		@include breakpoint($small) {
 			float: left;
 			margin-right: 2em;
 			width: 40%;
+		}
+
+		img {
+			display: block;
+			height: auto;
+			max-width: 100%;
 		}
 	}
 

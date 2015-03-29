@@ -1,7 +1,7 @@
 <div class="recipe-view">
 	<div class="recipe-name"><h1>{{recipe.name}}</h1> <a data-ng-if="canEdit" href="/edit/{{recipe.recipeid}}/" class="edit-link">Edit</a></div>
-	<section class="image" data-ng-if="recipe.image != null">
-		<img src="" alt="{{recipe.name}}"/>
+	<section class="image" data-ng-if="recipe.imageUrl != null">
+		<img data-ng-src="{{ recipe.imageUrl != null && recipe.imageUrl || '' }}" src="" alt="{{recipe.name}}"/>
 	</section>
 	<section class="ingredients" data-ng-if="recipe.ingredientGroups.length > 0">
 		<h2>Ingredients</h2>
@@ -27,7 +27,7 @@
 		</div>
 	</section>
 
-	<section class="tags" ng-if="recipe.tags.length > 0">
+	<section class="tags" data-ng-if="recipe.tags.length > 0">
 		<h2>Tags</h2>
 		<ul>
 			<li data-ng-repeat="tag in recipe.tags">
