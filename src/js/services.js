@@ -223,6 +223,7 @@ var RecipeEditor = function($http, $location, $timeout) {
 			var files = [];
 			if (imageInput.files.length > 0) {
 				files.push(imageInput.files[0]);
+				recipe.imageUrl = null;
 			}
 
 			$http({

@@ -84,6 +84,32 @@
 			margin-right: 2em;
 			width: 40%;
 		}
+		&:hover, &.focused {
+			.preview {
+				border-radius: 3px;
+				img {
+					opacity: .25;
+				}
+			}	
+			label, #recipe-image-remove {
+				opacity: .5;
+			}
+		}
+
+		&.loading {
+			.preview {
+				background: rgba($plum, .05);
+				min-height: 100px;
+
+				@include breakpoint($small) {
+					min-height: 300px;
+				}
+			}
+
+			.preview img, label, button {
+				display: none;
+			}
+		}
 		legend, input[type="file"] {
 			@extend %wai;
 			border: 0;
@@ -91,39 +117,71 @@
 			width: 0;
 		}
 		label {
-			background: image-url("camera.svg") no-repeat center / 60px auto;
+			background:image-url("camera.svg") no-repeat center / 60px auto;
 			display: block;
 			cursor: pointer;
 			height: 100%;
 			left: 0;
-			opacity: .5;
+			opacity: 0;
+			position: absolute;
+			text-indent: -9999em;
+			top: 0;
+			transition: opacity 200ms ease;
+			width: 50%;
+
+			&:hover, &:focus, &[data-focused="true"] {
+				opacity: 1;
+			}
+		}
+
+		#recipe-image-remove {
+			background: image-url("close.svg") no-repeat center / 40px auto;
+			border: 0;
+			height: 100%;
+			opacity: 0;
+			overflow: hidden;
+			padding: 0;
+			right: 0;
 			position: absolute;
 			text-indent: -9999em;
 			transition: opacity 200ms ease;
-			top: 0;
-			width: 100%;
+			top: 0px;
+			width: 50%;
 
 			&:hover, &:focus {
+				outline: none;
 				opacity: 1;
 			}
 		}
 
 		.preview {
-			border-radius: 2px;
+			border: 1px $plum dashed;
+			border-radius: 3px;
 			overflow: hidden;
 
 			img {
 				display: block;
 				height: auto;
 				max-width: 100%;
+				opacity: 1;
+				transition: opacity 200ms ease;
 			}
 		}
 
 		&.no-image {
+			label {
+				left: 0;
+				height: 100%;
+				opacity: .5;
+				width: 100%;
+
+				&:hover, &:focus, &[data-focused="true"] {
+					opacity: 1;
+				}
+			}
+
 			.preview {
 				background: rgba($plum, .05);
-				border: 1px $plum dashed;
-				border-radius: 3px;
 				min-height: 100px;
 
 				@include breakpoint($small) {

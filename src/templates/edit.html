@@ -2,12 +2,13 @@
 	<label for="recipe-name" class="hidden">Name:</label>
 	<input type="text" id="recipe-name" data-ng-model="recipe.name" name="name" required="required" aria-required="true" placeholder="Super Nomtastic {{recipe._id == null ? 'New ' : ''}}Recipe"/>
 
-	<fieldset class="recipe-image" data-ng-class="{noimage:recipe.imageUrl === null}">
+	<fieldset class="recipe-image" data-ng-class="{'no-image':recipe.imageUrl == null, loading: imageLoading, focused: imageEditing}">
 		<legend>Image</legend>
 		<div class="preview">
-			<img data-ng-if="recipe.imageUrl != null" data-ng-src="{{ recipe.imageUrl != null && recipe.imageUrl || '' }}" src="" alt="{{recipe.name}}"/>
+			<img data-ng-show="recipe.imageUrl != null" data-ng-src="{{ recipe.imageUrl != null && recipe.imageUrl || '' }}" src="" alt="{{recipe.name}}"/>
 		</div>
-		<label for="recipe-image">Upload image</label>
+		<button type="button" data-ng-show="recipe.imageUrl != null" id="recipe-image-remove">Remove image</button>
+		<label for="recipe-image">{{recipe.imageUrl != null ? 'Change image' : 'Upload image'}}</label>
 		<input type="file" id="recipe-image"/>
 		<input type="hidden" id="recipe-image-url" data-ng-model="recipe.imageUrl"/>
 	</fieldset>
