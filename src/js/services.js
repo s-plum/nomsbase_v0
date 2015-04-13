@@ -177,6 +177,106 @@ var RecipeEditor = function($http, $location, $timeout) {
 			this.initRecipe = _.clone(recipe, true);
 		},
 
+		createImageInput: function($scope) {
+			var self = this;
+
+			var fileInput = document.querySelector('input[type="file"]');
+			var fileDelete = document.getElementById('recipe-image-remove');
+
+			if (fileInput) {
+				fileInput.parentNode.removeChild(fileInput);
+			}
+
+			var filePreview = document.querySelector('.recipe-image');
+			var newInput = document.createElement('input');
+			newInput.setAttribute('type', 'file');
+			newInput.setAttribute('id', 'recipe-image');
+			filePreview.insertBefore(newInput, fileDelete);
+
+			self.bindImageInputEvents(newInput, $scope);
+		},
+
+		bindImageInputEvents: function(fileInput, $scope) {
+			var self = this;
+			var fileLabel = document.querySelector('[for="' + fileInput.id + '"]');
+
+			fileInput.addEventListener('change', function() {
+				fileLabel.removeAttribute('data-focused');
+				$scope.$apply(function() {
+					$scope.imageEditing = false;
+				});
+				if (this.files.length > 0) {
+					$scope.$evalAsync(function() {
+						$scope.imageLoading = true;
+						$scope.imageEditing = false;
+					});
+					var reader = new FileReader();
+					reader.onloadend = function() {
+						$scope.$evalAsync(function() {
+							$scope.recipe.imageUrl = reader.result;
+							$scope.imageLoading = false;
+							$scope.imageEditing = false;
+							self.createImageInput($scope);
+						});
+					}
+					reader.readAsDataURL(this.files[0]);
+				}
+			});
+			fileInput.addEventListener('focus', function(e) {
+				if (e.relatedTarget !== null) {
+					$scope.$evalAsync(function() {
+						$scope.imageEditing = true;
+					});
+					fileLabel.setAttribute('data-focused', 'true');
+				}
+			});
+			fileInput.addEventListener('blur', function() {
+				fileLabel.removeAttribute('data-focused');
+				$scope.$evalAsync(function() {
+					$scope.imageEditing = false;
+				});
+			});
+			fileInput.addEventListener('keydown', function(e) {
+				if (e.keyCode === 13) {
+					this.click();
+				}
+			});
+		},
+
+		bindImageUploader: function($scope) {
+			var self = this;
+
+			var fileInput = document.querySelector('input[type="file"]');
+			var fileDelete = document.getElementById('recipe-image-remove');
+
+			//preload loading indicators
+			var loadImages = ['/img/plum.svg', '/img/nom.svg'];
+			for (var i=0; i<loadImages.length; i++) {
+				var img = new Image();
+				img.src = loadImages[i];
+			}
+
+			//bind onchange events
+			self.bindImageInputEvents(fileInput, $scope);
+
+			fileDelete.addEventListener('focus', function() {
+				$scope.$evalAsync(function() {
+					$scope.imageEditing = true;
+				});
+			});
+			fileDelete.addEventListener('blur', function() {
+				$scope.$evalAsync(function() {
+					$scope.imageEditing = false;
+				});
+			});
+			fileDelete.addEventListener('click', function(e) {
+				e.preventDefault();
+				$scope.$evalAsync(function() {
+					$scope.recipe.imageUrl = null;
+				});
+			});
+		},
+
 		hasChanges: function(current) {
 			return(angular.toJson(current) !== angular.toJson(this.initRecipe));
 		},

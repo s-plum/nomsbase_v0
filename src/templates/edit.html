@@ -5,11 +5,13 @@
 	<fieldset class="recipe-image" data-ng-class="{'no-image':recipe.imageUrl == null, loading: imageLoading, focused: imageEditing}">
 		<legend>Image</legend>
 		<div class="preview">
-			<img data-ng-show="recipe.imageUrl != null" data-ng-src="{{ recipe.imageUrl != null && recipe.imageUrl || '' }}" src="" alt="{{recipe.name}}"/>
+			<div class="preview-img-wrap">
+				<img data-ng-show="recipe.imageUrl != null" data-ng-src="{{ recipe.imageUrl != null && recipe.imageUrl || '' }}" src="" alt="{{recipe.name}}"/>
+			</div>
 		</div>
-		<button type="button" data-ng-show="recipe.imageUrl != null" id="recipe-image-remove">Remove image</button>
 		<label for="recipe-image">{{recipe.imageUrl != null ? 'Change image' : 'Upload image'}}</label>
 		<input type="file" id="recipe-image"/>
+		<button type="button" data-ng-show="recipe.imageUrl != null" id="recipe-image-remove">Remove image</button>
 		<input type="hidden" id="recipe-image-url" data-ng-model="recipe.imageUrl"/>
 	</fieldset>
 	
