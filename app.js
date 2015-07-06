@@ -34,6 +34,11 @@ if (env === 'dev') {
 
 app.get('/', routes.index);
 
+app.get('/robots.txt', function(req, res) {
+    res.type('text/plain');
+    res.send("User-agent: *\nDisallow: /");
+});
+
 //data get/set
 app.post('/login', api.validateUser(db));
 app.post('/add', api.add(db));
