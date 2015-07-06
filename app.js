@@ -7,11 +7,10 @@ var express = require('express'),
 	mongoose = require('mongoose'),
 	api = require('./routes/api'),
 	distPath = '/dist',
-	dbStrings = require('./admin/db-connect'),
 	env = app.get('env') || 'dev';
 
 //connect to database	
-mongoose.connect(dbStrings[env]);
+mongoose.connect('mongodb://localhost:27017/nomsbase');
 
 var db = mongoose.connection;
 
