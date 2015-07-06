@@ -22,13 +22,13 @@ nomsbase
 
 I promise that this is the last instance of baking-related wordplay in this README.
 
-1. Install dependencies
+1. Install dependencies:
 	```
 	sudo npm install
 	bower install
 	```
 
-2. Compile the site files
+2. Compile the site files:
 	```
 	gulp build
 	```
