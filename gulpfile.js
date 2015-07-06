@@ -32,31 +32,18 @@ var gulp = require('gulp'),
     templates: distPath + '/templates'
   };
 
-var environments = {
-  dev: {
-    tasks: ['scripts', 'templates', 'html', 'sassy', 'images', 'watch' ,'server'],
-    nodeArgs: ['--debug']
+var buildTasks = ['scripts', 'templates', 'html', 'sassy', 'images'],
+  config = {
+    errorHandler: function(err) {
+      console.log(err.toString())
+    }
   },
-  prod: {
-    tasks: ['scripts', 'templates', 'html', 'sassy', 'images'],
-    nodeArgs: []
-  }
+  shouldMinify = argv.minify,
+  shouldWatch = argv.watch;
+
+if (shouldWatch) {
+  buildTasks.push('watch');
 }
-
-var config = {
-  port: 3000,
-  env: argv.env || argv.e || 'dev',
-  errorHandler: function(err) {
-    console.log(err.toString())
-  }
-};
-
-gulp.task('server', function() {
-	nodemon({
-    script: 'app.js',
-    env: { 'NODE_ENV': config.env }
-  });
-});
 
 gulp.task('watch:scripts', function() {
   watch([srcPaths.js, "!" + srcPath + '/js/config.js'], function(files, cb) {
@@ -104,9 +91,9 @@ gulp.task('browserify', function() {
     .on('error', config.errorHandler)
     .pipe(source('main.js'))
     .pipe(streamify(ngAnnotate()))
-    .pipe(gulpIf(config.env === 'prod', streamify(uglify({mangle: false}))))
+    .pipe(gulpIf(shouldMinify, streamify(uglify({mangle: false}))))
     .pipe(gulp.dest(distPath + '/js'))
-    .pipe(gulpIf(config.env === 'dev', livereload()));
+    .pipe(gulpIf(shouldWatch, livereload()));
 });
 
 gulp.task('sassy', function() {
@@ -125,7 +112,7 @@ gulp.task('sassy', function() {
         cascade: false
     }))
     .pipe(gulp.dest(distPath + '/css'))
-    .pipe(gulpIf(config.env === 'dev', livereload()));
+    .pipe(gulpIf(shouldWatch, livereload()));
 });
 
 gulp.task('templates', function() {
@@ -134,7 +121,7 @@ gulp.task('templates', function() {
       errorHandler: config.errorHandler
     }))
     .pipe(gulp.dest(distPaths.templates))
-	.pipe(gulpIf(config.env === 'dev', livereload()));
+	.pipe(gulpIf(shouldWatch, livereload()));
 });
 
 gulp.task('html', function() {
@@ -143,13 +130,19 @@ gulp.task('html', function() {
       errorHandler: config.errorHandler
     }))
     .pipe(gulp.dest(distPaths.html))
-    .pipe(gulpIf(config.env === 'dev', livereload()));
+    .pipe(gulpIf(shouldWatch, livereload()));
 });
 
 gulp.task('images', ['clean:images'], function() {
   gulp.src(srcPaths.img)
     .pipe(gulp.dest(distPaths.img))
-    .pipe(gulpIf(config.env === 'dev', livereload()));
+    .pipe(gulpIf(shouldWatch, livereload()));
 });
 
-gulp.task('default', environments[config.env].tasks);
+gulp.task('build', buildTasks);
+
+gulp.task('serve', ['build'], function() {
+  nodemon({
+    script: 'app.js'
+  });
+});
