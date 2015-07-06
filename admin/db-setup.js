@@ -1,11 +1,8 @@
 var mongoose = require('mongoose'),
     User = require('../models/user'),
-    Counter = require('../models/counter'),
-    dbConfig = require('./db-connect');
+    Counter = require('../models/counter');
 
-var connStr = dbConfig.dev;
-
-mongoose.connect(connStr, function(err) {
+mongoose.connect('mongodb://localhost:27017/nomsbase', function(err) {
     if (err) throw err;
     console.log('Successfully connected to MongoDB');
 });
