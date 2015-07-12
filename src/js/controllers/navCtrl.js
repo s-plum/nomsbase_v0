@@ -32,6 +32,9 @@ var NavCtrl = function($scope, $location, Page) {
 		a.addEventListener('click', function(e) {
 			$scope.toggleMenu(e);
 		});
+		a.addEventListener('mouseover', function(e) {
+			this.removeAttribute('data-transitioning');
+		});
 	});
 
 	$scope.isHome = function() {
@@ -45,6 +48,7 @@ var NavCtrl = function($scope, $location, Page) {
 		}
 		else {
 			e.target.blur();
+			e.target.setAttribute('data-transitioning', 'true');
 		}
 		if (!menuBreak.matches && !$scope.isHome()) {
 			$scope.menuOpen = !$scope.menuOpen;

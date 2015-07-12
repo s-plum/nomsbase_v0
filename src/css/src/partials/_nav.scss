@@ -147,9 +147,11 @@ nav {
 					&:after {
 						background: image-url("#{$nom}.svg") no-repeat center/85% auto;
 					}
-					&:hover, &:focus {
-						&:after {
-							background-size: 100% auto;
+					&:not([data-transitioning="true"]) {
+						&:hover, &:focus {
+							&:after {
+								background-size: 100% auto;
+							}
 						}
 					}
 				}
@@ -334,6 +336,19 @@ nav:not(.home) {
 						@include navLinkDropHover;
 						top: 2.5em;
 						width: auto;
+					}
+				}
+
+				&[data-transitioning="true"] {
+					&:hover, &:focus {
+						background: none; 
+						&:before {
+							display: none;
+						}
+
+						b {
+							display: none;
+						}
 					}
 				}
 			}
