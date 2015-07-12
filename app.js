@@ -7,6 +7,7 @@ var express = require('express'),
 	mongoose = require('mongoose'),
 	api = require('./routes/api'),
 	distPath = '/dist',
+	bodyParser = require('body-parser'),
 	env = app.get('env') || 'dev';
 
 //connect to database	
@@ -21,9 +22,8 @@ db.once('connected', function() {
 app.set('port', process.env.PORT || 3000);
 app.use(express.favicon(path.join(__dirname, distPath + '/img/favicon.ico')));
 app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, distPath)));
 
@@ -41,8 +41,8 @@ app.get('/robots.txt', function(req, res) {
 
 //data get/set
 app.post('/login', api.validateUser(db));
-app.post('/add', api.add(db));
-app.post('/update/:id', api.update(db));
+app.post('/recipe', api.update);
+app.post('/recipe/:id', api.update);
 app.get('/get/:id', api.get(db));
 app.get('/search/:query', api.search(db));
 app.get('/getrandom', api.getRandom(db));

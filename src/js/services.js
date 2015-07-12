@@ -303,9 +303,9 @@ var RecipeEditor = function($http, $location, $timeout) {
 			re.isSaving = true;
 			
 
-			var url = '/add';
+			var url = '/recipe';
 			if (recipe._id != null) {
-				url = '/update/' + recipe._id;
+				url += '/' + recipe._id;
 			}
 
 			//remove empty ingredients
