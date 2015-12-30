@@ -5,3 +5,5 @@ dist/
 src/vendor
 *.txt
 *.log
+*.env
+tmp

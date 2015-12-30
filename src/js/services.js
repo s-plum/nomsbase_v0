@@ -200,12 +200,13 @@ var RecipeEditor = function($http, $location, $timeout) {
 			var self = this;
 			var fileLabel = document.querySelector('[for="' + fileInput.id + '"]');
 
-			fileInput.addEventListener('change', function() {
+			fileInput.addEventListener('change', function(e) {
 				fileLabel.removeAttribute('data-focused');
 				$scope.$apply(function() {
 					$scope.imageEditing = false;
 				});
 				if (this.files.length > 0) {
+					var tempUrl = URL.createObjectURL(e.target.files[0]);
 					$scope.$evalAsync(function() {
 						$scope.imageLoading = true;
 						$scope.imageEditing = false;
@@ -213,10 +214,10 @@ var RecipeEditor = function($http, $location, $timeout) {
 					var reader = new FileReader();
 					reader.onloadend = function() {
 						$scope.$evalAsync(function() {
-							$scope.recipe.imageUrl = reader.result;
+							$scope.recipe.imageUrl = tempUrl;
 							$scope.imageLoading = false;
 							$scope.imageEditing = false;
-							self.createImageInput($scope);
+							//self.createImageInput($scope);
 						});
 					}
 					reader.readAsDataURL(this.files[0]);

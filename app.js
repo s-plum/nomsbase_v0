@@ -10,6 +10,8 @@ var express = require('express'),
 	bodyParser = require('body-parser'),
 	env = app.get('env') || 'dev';
 
+require('dotenv').load();
+
 //connect to database	
 mongoose.connect('mongodb://localhost:27017/nomsbase');
 
