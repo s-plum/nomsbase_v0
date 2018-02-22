@@ -1,7 +1,7 @@
-nomsbase
+nomsbase_v0
 ========
 
-> A lean, MEAN, noms recipe lookup machine.
+> Legacy repository. A lean, MEAN, noms recipe lookup machine.
 
 ## Ingredients
 
